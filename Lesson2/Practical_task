@@ -1,0 +1,14 @@
+/* Создаем базу example в среде MySQL через консоль */
+CREATE DATEBASE example;
+/* Переключаемся на базу */
+USE example;
+/* Создаем таблицу users */
+CREATE TABLE users (id INT, name VARCHAR(20));
+/* Создаем дамп базы example в файл */
+mysqldump example > example_dump.sql
+/* Создаем новую базу sample */
+CREATE DATEBASE sample;
+/* Загружаем данные из дампа в новую базу */
+mysql sample < example_dump.sql;
+/* Проверяем наличие таблицы users в sample */
+SHOW TABLES;
