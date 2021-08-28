@@ -1,0 +1,40 @@
+/* Создаем в окружении MySQL новую базу home_media */
+CREATE DATABASE home_media;
+USE home_madia;
+/* Создаем таблицы в базе */
+
+DROP TABLE IF EXISTS users;
+CREATE TABLE users (
+id          INT UNSIGNED NOT NULL,
+name        VARCHAR(255)   COMMENT 'Имя пользователя',
+email       DATE           COMMENT 'Почтовый ящик пользователя',
+) COMMENT = 'Пользователи';
+
+DROP TABLE IF EXISTS catalogs;
+CREATE TABLE catalogs (
+id          INT UNSIGNED NOT NULL,
+type        VARCHAR(255)    COMMENT 'Тип мультимедиа',
+) COMMENT = 'Разделяем фото/аудио/видео';
+
+DROP TABLE IF EXISTS products;
+CREATE TABLE products (
+id          SERIAL PRIMARY KEY,
+name        VARCHAR(255)   COMMENT 'Название',
+description TEXT           COMMENT 'Описание',
+catalog_id  INT UNSIGNED,
+KEY index_of_catalog_id(catalog_id)
+) COMMENT = 'Список мультимедийных фалов';
+
+DROP TABLE IF EXISTS file_path;
+CREATE TABLE file_path (
+id          INT UNSIGNED NOT NULL,
+path        VARCHAR(255)   COMMENT 'Путь к файлу',
+) COMMENT = 'Адрес мультимедия';
+
+DROP TABLE IF EXISTS keywords;
+CREATE TABLE keywords (
+id          SERIAL PRIMARY KEY,
+word_text   VARCHAR(255)   COMMENT 'Ключевое слово',
+product_id  INT UNSIGNED,
+KEY index_of_product_id(product_id)
+) COMMENT = 'Список ключевых слов';
