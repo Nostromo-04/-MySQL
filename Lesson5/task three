@@ -1,0 +1,39 @@
+-- создал таблицу с полями VALUE и id
+CREATE TABLE storehouses_products(
+	id INT UNSIGNED COMMENT 'Количество',
+	`value` INT UNSIGNED COMMENT 'Количество'
+  );
+
+-- заносим значения в таблицу
+INSERT INTO storehouses_products (id, `value`) VALUES 
+(1, 0),(2, 2500),(1, 0),(2, 30),(2, 500),(2, 1);
+
+--результат
++------+-------+
+| id   | value |
++------+-------+
+|    1 |     0 |
+|    2 |  2500 |
+|    1 |     0 |
+|    2 |    30 |
+|    2 |   500 |
+|    2 |     1 |
++------+-------+
+
+--сортируем
+SELECT `value` FROM storehouses_products ORDER BY id DESC, `value`;
+
+--результат
++-------+
+| value |
++-------+
+|     1 |
+|    30 |
+|   500 |
+|  2500 |
+|     0 |
+|     0 |
++-------+
+
+SELECT * FROM storehouses_products;
+DESC storehouses_products;
