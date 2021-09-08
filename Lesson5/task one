@@ -1,0 +1,124 @@
+-- для ДЗ_5 создал новую таблицу по подобию таблицы users
+CREATE TABLE vk_lesson5(
+	  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор строки',
+    first_name VARCHAR(100) NOT NULL COMMENT 'Имя пользователя',
+	  last_name VARCHAR(100) NOT NULL COMMENT 'Фамилия пользователя',
+	  birthday DATE NOT NULL COMMENT 'Дата рождения',
+	  gender CHAR(1) NOT NULL COMMENT 'Пол Пользователя',
+	  email VARCHAR(100) NOT NULL UNIQUE COMMENT 'Email пользователя',
+	  phone VARCHAR(11) NOT NULL UNIQUE COMMENT 'Номер телефона пользователя',
+	  created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата и время создания строки',
+	  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Дата и время обновления строки'
+) COMMENT 'Таблица пользователей';
+
+-- копирую данные таблицы users в таблицу vk_lesson5, для created_at и updated_at использовал функцию NOW()
+INSERT INTO vk_lesson5 SELECT NULL,first_name,last_name,birthday,gender,email,phone,now(),now() FROM users;
+
+SELECT * FROM vk_lesson5;
+DESCRIBE vk_lesson5;
+
+-- результат заполнения таблицы при помощи функции NOW() полей created_at и updated_at
++-----+------------+-------------+------------+--------+---------------------------------+--------------+---------------------+---------------------+
+| id  | first_name | last_name   | birthday   | gender | email                           | phone        | created_at          | updated_at          |
++-----+------------+-------------+------------+--------+---------------------------------+--------------+---------------------+---------------------+
+|   1 | Muhammad   | Gaylord     | 2006-07-11 | M      | savanna.hintz@example.net       | +79031560606 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|   2 | Penelope   | Bosco       | 1973-11-22 | F      | marshall13@example.net          | +79506640354 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|   3 | Eddie      | Davis       | 1974-02-14 | F      | devyn74@example.com             | +79438519984 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|   4 | Lucy       | Emmerich    | 2011-04-18 | F      | hauck.alexandrea@example.com    | +79672678890 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|   5 | Rahul      | Hansen      | 1989-03-11 | F      | lionel.leffler@example.org      | +79047834532 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|   6 | Jacynthe   | Hickle      | 2007-04-02 | M      | agulgowski@example.com          | +79221136018 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|   7 | Ceasar     | Effertz     | 2012-02-28 | M      | yjacobson@example.com           | +79962176526 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|   8 | America    | Wiegand     | 2008-12-24 | M      | leon78@example.com              | +79147474613 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|   9 | Elna       | Harvey      | 1990-09-15 | F      | jast.ken@example.com            | +79850843512 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  10 | Otho       | Conn        | 1977-02-16 | M      | devon.smith@example.com         | +79811793756 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  11 | Luella     | Schmeler    | 1986-02-20 | F      | cgerhold@example.org            | +79506438277 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  12 | Shanie     | Flatley     | 1995-10-29 | M      | ogrant@example.com              | +79096810149 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  13 | Kimberly   | Satterfield | 1982-12-30 | F      | kitty.baumbach@example.com      | +79964735940 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  14 | Delbert    | Wuckert     | 1994-04-15 | F      | ycrona@example.com              | +79533249292 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  15 | Eula       | Gerlach     | 1993-08-30 | M      | miller.malika@example.com       | +79772038669 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  16 | Trevor     | Kihn        | 1979-11-01 | F      | xvonrueden@example.net          | +79260445501 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  17 | Chelsie    | O'Connell   | 1997-05-03 | F      | fturcotte@example.org           | +79986111529 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  18 | Michelle   | Schneider   | 2006-05-20 | M      | koepp.allan@example.net         | +79149221175 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  19 | Raegan     | Zemlak      | 1989-08-17 | M      | bauch.vicky@example.com         | +79787771317 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  20 | Brayan     | Champlin    | 1979-01-14 | F      | mcglynn.marcella@example.net    | +79491193093 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  21 | Celia      | Hartmann    | 2008-12-06 | M      | cathryn.kling@example.net       | +79092651545 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  22 | Lola       | Mayert      | 2010-05-24 | F      | bruecker@example.com            | +79989678478 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  23 | Lelah      | Rice        | 2021-02-10 | F      | emante@example.net              | +79670437790 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  24 | Rosa       | Dickinson   | 1996-08-30 | M      | greyson.gutmann@example.net     | +79383153546 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  25 | Arturo     | Kulas       | 2003-10-03 | M      | layla33@example.org             | +79904454391 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  26 | Flavio     | Collier     | 2017-04-01 | F      | wolf.dave@example.org           | +79372811350 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  27 | Daphnee    | Crooks      | 1989-05-13 | F      | enolan@example.com              | +79150693610 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  28 | Nova       | Will        | 2000-08-04 | M      | russ.stroman@example.org        | +79635034028 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  29 | Toy        | Konopelski  | 2018-05-24 | M      | adele11@example.net             | +79723089343 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  30 | Norma      | Witting     | 1998-12-16 | M      | janie.labadie@example.org       | +79710344665 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  31 | Ollie      | Marks       | 1979-12-07 | M      | schimmel.laura@example.org      | +79382455328 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  32 | Desmond    | Balistreri  | 1995-11-25 | F      | ncorkery@example.org            | +79781242675 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  33 | Tania      | Schultz     | 1988-02-11 | F      | blaze57@example.com             | +79758847422 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  34 | Trisha     | Crist       | 1995-06-26 | M      | rau.alison@example.org          | +79450509120 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  35 | Darron     | Boyle       | 2001-09-10 | M      | nankunding@example.com          | +79976003364 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  36 | Jerod      | Krajcik     | 1972-03-24 | F      | robert.schmeler@example.net     | +79528489494 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  37 | Floyd      | Wyman       | 2014-09-18 | M      | osvaldo.reinger@example.com     | +79714437409 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  38 | Dario      | Padberg     | 2001-08-18 | M      | dpollich@example.net            | +79986718594 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  39 | Rita       | Graham      | 2000-05-17 | M      | daniela29@example.com           | +79790280775 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  40 | Rafael     | Shanahan    | 1994-04-10 | F      | keebler.providenci@example.org  | +79991248124 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  41 | Billie     | Abernathy   | 1997-10-02 | F      | rkertzmann@example.net          | +79585398328 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  42 | Rosalee    | Greenfelder | 1992-12-01 | M      | skuvalis@example.net            | +79953247299 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  43 | Oma        | Goodwin     | 2008-03-08 | M      | lueilwitz.arjun@example.com     | +79010041545 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  44 | Dorothy    | Trantow     | 2000-12-08 | F      | kaci.mertz@example.org          | +79190465855 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  45 | Raoul      | Runte       | 1973-08-07 | M      | osinski.cleta@example.net       | +79922204672 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  46 | Joannie    | Doyle       | 2016-08-26 | M      | bd'amore@example.com            | +79039625830 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  47 | Naomie     | Nicolas     | 1974-09-29 | F      | kcrist@example.org              | +79431515160 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  48 | Georgiana  | Waelchi     | 2001-04-23 | F      | joanie20@example.com            | +79038698347 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  49 | Greta      | Swaniawski  | 1997-09-28 | F      | kyle.mertz@example.org          | +79898946282 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  50 | Lesly      | Windler     | 2010-02-05 | F      | lpowlowski@example.net          | +79378636404 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  51 | Madie      | Rutherford  | 2010-06-29 | M      | soledad60@example.org           | +79196343206 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  52 | Tiara      | Krajcik     | 2011-12-12 | F      | vdickens@example.net            | +79845806849 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  53 | Marion     | Marks       | 2004-12-20 | M      | conroy.josephine@example.net    | +79640004659 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  54 | Holden     | Gaylord     | 1996-07-05 | M      | charlene.daniel@example.org     | +79662602778 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  55 | Stanley    | Gorczany    | 2001-12-05 | F      | nwisozk@example.net             | +79392999947 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  56 | Marge      | Ziemann     | 2004-09-27 | F      | veronica99@example.org          | +79977191429 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  57 | Stacey     | Jacobs      | 1984-08-27 | F      | devonte.fisher@example.com      | +79706957340 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  58 | Maxine     | Fay         | 2005-04-09 | M      | howell.rogelio@example.org      | +79603212443 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  59 | Dulce      | Kuvalis     | 1982-03-23 | F      | xcormier@example.com            | +79895190225 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  60 | Elisa      | Nader       | 2014-09-26 | M      | janice.kilback@example.net      | +79666313832 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  61 | Barry      | Ritchie     | 2020-07-27 | F      | lula.hane@example.org           | +79645998516 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  62 | Janick     | Kiehn       | 2004-03-26 | M      | wwillms@example.net             | +79231051114 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  63 | Ulices     | Simonis     | 1977-04-26 | F      | pagac.julie@example.org         | +79217260053 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  64 | Carrie     | Gleichner   | 1972-10-08 | F      | borer.jaquelin@example.net      | +79393146954 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  65 | Adele      | Jacobs      | 2003-07-12 | F      | collins.nathen@example.net      | +79313954643 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  66 | Ewell      | Hermiston   | 2012-01-30 | M      | bauch.cole@example.com          | +79390332386 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  67 | Jackie     | Hamill      | 2017-04-07 | F      | claudine.macejkovic@example.net | +79009798034 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  68 | Karine     | Hermann     | 1993-04-08 | F      | nader.jaqueline@example.com     | +79877993038 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  69 | Robyn      | Oberbrunner | 1994-07-25 | F      | harber.shania@example.com       | +79360571126 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  70 | Shakira    | Doyle       | 1991-10-12 | M      | rosenbaum.mark@example.com      | +79168876545 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  71 | Doug       | Schamberger | 2010-08-03 | M      | roman70@example.net             | +79762669377 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  72 | Hertha     | Heidenreich | 1990-09-22 | M      | casandra.auer@example.org       | +79306717286 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  73 | Guido      | Ritchie     | 1998-04-27 | F      | nicola.stehr@example.org        | +79245578329 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  74 | Ryley      | Kiehn       | 1970-05-30 | M      | lincoln49@example.org           | +79307739820 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  75 | Gabrielle  | Pfeffer     | 2003-12-17 | M      | qwhite@example.org              | +79801964142 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  76 | Mortimer   | Dietrich    | 2005-06-03 | F      | cedrick.glover@example.org      | +79086601284 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  77 | Elsie      | Pouros      | 2018-03-18 | M      | winifred.dicki@example.net      | +79027114023 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  78 | Yasmeen    | Erdman      | 2016-07-08 | F      | malinda59@example.net           | +79875766294 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  79 | Louie      | Kohler      | 1975-03-11 | M      | ephraim92@example.com           | +79297489434 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  80 | Phyllis    | Wyman       | 1980-04-10 | F      | tom72@example.net               | +79860148318 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  81 | Laverne    | Green       | 2008-06-14 | M      | darrell.rath@example.net        | +79408273325 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  82 | Carmela    | Beer        | 2014-11-21 | M      | bhudson@example.com             | +79460921699 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  83 | Luis       | Waters      | 1979-10-22 | F      | kovacek.marcellus@example.net   | +79079788551 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  84 | Elvera     | Ullrich     | 2007-06-06 | F      | jalon.huel@example.com          | +79016177690 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  85 | Erin       | Williamson  | 1970-01-27 | M      | yhoeger@example.net             | +79841522827 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  86 | Meredith   | Reichert    | 2015-07-14 | F      | ankunding.ferne@example.org     | +79159081101 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  87 | Mitchel    | Jaskolski   | 1990-10-16 | M      | larson.cecelia@example.com      | +79270837052 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  88 | May        | Price       | 2010-09-28 | F      | arlene.witting@example.net      | +79876941990 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  89 | Leilani    | Lynch       | 2019-09-26 | F      | christiansen.ralph@example.com  | +79572198825 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  90 | Adrianna   | Nienow      | 1979-08-08 | F      | madisyn78@example.net           | +79230168189 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  91 | Sigrid     | Wiegand     | 1986-10-19 | M      | pshanahan@example.com           | +79434244501 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  92 | Kaycee     | Smitham     | 2003-03-23 | F      | pharber@example.org             | +79480717969 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  93 | Shanel     | Funk        | 1994-10-28 | M      | wgrady@example.net              | +79100856373 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  94 | Uriel      | Bartell     | 1981-02-08 | F      | larkin.olaf@example.com         | +79062127987 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  95 | Erick      | Fahey       | 1991-08-21 | M      | shannon.powlowski@example.net   | +79008070850 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  96 | Zora       | Von         | 1983-03-24 | F      | stanley31@example.org           | +79853970319 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  97 | Keven      | Aufderhar   | 1972-12-13 | M      | gerardo.greenholt@example.com   | +79245639082 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  98 | Edwardo    | Lindgren    | 2006-04-04 | F      | ellis.connelly@example.org      | +79666284479 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+|  99 | America    | Yundt       | 2015-10-04 | M      | ivy30@example.net               | +79594505182 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
+| 100 | Dasia      | Mann        | 2003-12-27 | M      | sauer.ludie@example.net         | +79973672505 | 2021-09-08 21:30:26 | 2021-09-08 21:30:26 |
++-----+------------+-------------+------------+--------+---------------------------------+--------------+---------------------+---------------------+
