@@ -1,0 +1,65 @@
+-- создал новую таблицу с полями created_at и updated_at с типом VARCHAR
+CREATE TABLE vk_task2(
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор строки',
+    first_name VARCHAR(100) NOT NULL COMMENT 'Имя пользователя',
+	last_name VARCHAR(100) NOT NULL COMMENT 'Фамилия пользователя',
+	birthday DATE NOT NULL COMMENT 'Дата рождения',
+	gender CHAR(1) NOT NULL COMMENT 'Пол Пользователя',
+	email VARCHAR(100) NOT NULL UNIQUE COMMENT 'Email пользователя',
+	phone VARCHAR(12) NOT NULL UNIQUE COMMENT 'Номер телефона пользователя',
+	created_at VARCHAR(100) COMMENT 'Дата и время создания строки',
+	updated_at VARCHAR(100) COMMENT 'Дата и время обновления строки'
+) COMMENT 'Таблица пользователей';
+
+-- вставляем данные в таблицу
+INSERT INTO vk_task2 (first_name,last_name,birthday,gender,email,phone,created_at,updated_at) VALUES
+	('Петр', 'Башаров', '1995-02-13', 'M', '456@mail.ru', '+79511234567', '01.08.2021 8:10','01.08.2021 8:10'),
+	('Виктор', 'Лунь', '1963-04-11', 'M', '789@mail.ru', '+79521234567', '01.08.2021 8:10','01.08.2021 8:10'),
+    ('Оксана', 'Шмель', '1990-06-05', 'F', '963@mail.ru', '+79531234567', '01.08.2021 8:10','01.08.2021 8:10'),
+    ('Зина', 'Муркина', '1985-03-26', 'F', '852@mail.ru', '+79541234567', '01.08.2021 8:10','01.08.2021 8:10'),
+    ('Федор', 'Бондарчук', '1971-01-20', 'M', '741@mail.ru', '+79551234567', '01.08.2021 8:10','01.08.2021 8:10');
+
+-- попытка неявного преобразованния провалилась
+/*ALTER TABLE vk_task2 MODIFY created_at DATETIME;*/
+
+-- поискал в интернете функцию преобразования строки в дату STR_TO_DATE() и решил, что преобразование сделаю  в новых столбцах
+ALTER TABLE vk_task2 ADD created_at_1 DATETIME;
+UPDATE vk_task2 SET created_at_1 = STR_TO_DATE(created_at, '%d.%m.%Y %H:%i') WHERE id<200;
+
+ALTER TABLE vk_task2 ADD updated_at_1 DATETIME;
+UPDATE vk_task2 SET updated_at_1 = STR_TO_DATE(updated_at, '%d.%m.%Y %H:%i') WHERE id<200;
+
+-- результат преобразования с использованием функции STR_TO_DATE()
++----+------------+-----------+------------+--------+-------------+--------------+-----------------+-----------------+---------------------+---------------------+
+| id | first_name | last_name | birthday   | gender | email       | phone        | created_at      | updated_at      | created_at_1        | updated_at_1        |
++----+------------+-----------+------------+--------+-------------+--------------+-----------------+-----------------+---------------------+---------------------+
+|  1 | Светлана   | Коршунова | 1975-12-21 | F      | 123@mail.ru | +79501234567 | 01.08.2021 8:10 | 01.08.2021 8:10 | 2021-08-01 08:10:00 | 2021-08-01 08:10:00 |
+|  7 | Петр       | Башаров   | 1995-02-13 | M      | 456@mail.ru | +79511234567 | 01.08.2021 8:10 | 01.08.2021 8:10 | 2021-08-01 08:10:00 | 2021-08-01 08:10:00 |
+|  8 | Виктор     | Лунь      | 1963-04-11 | M      | 789@mail.ru | +79521234567 | 01.08.2021 8:10 | 01.08.2021 8:10 | 2021-08-01 08:10:00 | 2021-08-01 08:10:00 |
+|  9 | Оксана     | Шмель     | 1990-06-05 | F      | 963@mail.ru | +79531234567 | 01.08.2021 8:10 | 01.08.2021 8:10 | 2021-08-01 08:10:00 | 2021-08-01 08:10:00 |
+| 10 | Зина       | Муркина   | 1985-03-26 | F      | 852@mail.ru | +79541234567 | 01.08.2021 8:10 | 01.08.2021 8:10 | 2021-08-01 08:10:00 | 2021-08-01 08:10:00 |
+| 11 | Федор      | Бондарчук | 1971-01-20 | M      | 741@mail.ru | +79551234567 | 01.08.2021 8:10 | 01.08.2021 8:10 | 2021-08-01 08:10:00 | 2021-08-01 08:10:00 |
++----+------------+-----------+------------+--------+-------------+--------------+-----------------+-----------------+---------------------+---------------------+
+
+-- удаляем столбцы VARCHAR и переименовываем
+ALTER TABLE vk_task2 DROP updated_at;
+ALTER TABLE vk_task2 RENAME COLUMN updated_at_1 TO updated_at;
+ALTER TABLE vk_task2 DROP created_at;
+ALTER TABLE vk_task2 RENAME COLUMN created_at_1 TO created_at;
+
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| id         | int unsigned | NO   | PRI | NULL    | auto_increment |
+| first_name | varchar(100) | NO   |     | NULL    |                |
+| last_name  | varchar(100) | NO   |     | NULL    |                |
+| birthday   | date         | NO   |     | NULL    |                |
+| gender     | char(1)      | NO   |     | NULL    |                |
+| email      | varchar(100) | NO   | UNI | NULL    |                |
+| phone      | varchar(12)  | NO   | UNI | NULL    |                |
+| created_at | datetime     | YES  |     | NULL    |                |
+| updated_at | datetime     | YES  |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+
+SELECT * FROM vk_task2;
+DESC vk_task2;
