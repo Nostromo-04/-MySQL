@@ -1,0 +1,59 @@
+USE vk;
+DROP TABLE IF EXISTS users_age;
+
+-- создаем таблицу 
+CREATE TABLE users_age(
+	name VARCHAR(100) COMMENT 'Имя',
+	birthday DATE COMMENT 'Дата рождения',
+    birthday_now DATE COMMENT 'Дата рождения в текущем году'
+    );
+
+-- копируем данные с таблицы users
+INSERT INTO 
+	users_age 
+SELECT 
+	first_name,
+    birthday,
+    CONCAT(YEAR(NOW()), '-', SUBSTRING(birthday, 6, 10))
+FROM 
+	users;
+ 
+ -- в таблице 100 строк, вывел первые 10
++----------+------------+--------------+
+| name     | birthday   | birthday_now |
++----------+------------+--------------+
+| Creola   | 2006-12-14 | 2021-12-14   |
+| Shea     | 1984-11-25 | 2021-11-25   |
+| Marianne | 1982-11-04 | 2021-11-04   |
+| Savion   | 2020-07-31 | 2021-07-31   |
+| Kendra   | 1991-04-04 | 2021-04-04   |
+| Dane     | 2008-03-08 | 2021-03-08   |
+| Josiane  | 1984-01-27 | 2021-01-27   |
+| Dante    | 2007-10-21 | 2021-10-21   |
+| Jaiden   | 1994-05-14 | 2021-05-14   |
+| Jimmy    | 1989-07-16 | 2021-07-16   |
++----------+------------+--------------+
+  
+-- считаем количество дней недели
+SELECT
+	DAYNAME(birthday_now) AS week_day,
+	COUNT(*) AS quantity
+FROM
+	users_age
+GROUP BY
+	week_day
+ORDER BY
+	quantity DESC;
+  
+ -- результирующая таблица 
++-----------+----------+
+| week_day  | quantity |
++-----------+----------+
+| Tuesday   |       18 |
+| Monday    |       16 |
+| Sunday    |       14 |
+| Wednesday |       14 |
+| Thursday  |       13 |
+| Friday    |       13 |
+| Saturday  |       12 |
++-----------+----------+
