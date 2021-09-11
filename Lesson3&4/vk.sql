@@ -7,7 +7,7 @@ USE vk;
 
 CREATE TABLE users (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор строки',
-    first_name VARCHAR(100) NOT NULL COMMENT 'Имя пользователя',
+    	first_name VARCHAR(100) NOT NULL COMMENT 'Имя пользователя',
 	last_name VARCHAR(100) NOT NULL COMMENT 'Фамилия пользователя',
 	birthday DATE NOT NULL COMMENT 'Дата рождения',
 	gender CHAR(1) NOT NULL COMMENT 'Пол Пользователя',
@@ -29,10 +29,10 @@ DESCRIBE users;
 
 CREATE TABLE profiles (
 	user_id INT UNSIGNED NOT NULL PRIMARY KEY COMMENT 'Идентификатор строки',
-    city VARCHAR(100) COMMENT 'Город проживания',
+    	city VARCHAR(100) COMMENT 'Город проживания',
 	country VARCHAR(100) COMMENT 'Страна проживания',
 	`status` VARCHAR(10) COMMENT 'Текущий статус',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата и время создания строки',
+    	created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата и время создания строки',
 	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Дата и время обновления строки'
 ) COMMENT 'Таблица профилей';
 
@@ -44,11 +44,11 @@ CREATE TABLE friendship (
 	user_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на инициатора дружбы',
 	friend_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на получателя запроса о дружбе',
 	request_type_id INT UNSIGNED NOT NULL COMMENT 'Тип запроса',
-    requested_at DATETIME COMMENT 'Дата и время отправки приглашения',
+    	requested_at DATETIME COMMENT 'Дата и время отправки приглашения',
 	confirmed_at DATETIME COMMENT 'Дата и время подтверждения приглашения',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата и время создания строки',
+    	created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата и время создания строки',
 	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Дата и время обновления строки',
-    PRIMARY KEY (user_id, friend_id) COMMENT 'Составной первичный ключ'
+    	PRIMARY KEY (user_id, friend_id) COMMENT 'Составной первичный ключ'
 ) COMMENT 'Таблица дружбы';
 
 ALTER TABLE friendship ADD CONSTRAINT friendship_user_id FOREIGN KEY (user_id) REFERENCES users(id);
@@ -63,7 +63,7 @@ CREATE TABLE friendship_request_types (
 	name VARCHAR(150) NOT NULL UNIQUE COMMENT 'Email пользователя',
 	created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата и время создания строки',
 	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Дата и время обновления строки'
-    ) COMMENT 'Типы запроса на дружбу';
+) COMMENT 'Типы запроса на дружбу';
 
 ALTER TABLE friendship ADD CONSTRAINT friendship_request_type_id FOREIGN KEY (request_type_id) REFERENCES friendship_request_types(id);
 
@@ -74,29 +74,28 @@ CREATE TABLE communities (
 	name VARCHAR(150) NOT NULL UNIQUE COMMENT 'Название группы',
 	created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата и время создания строки',
 	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Дата и время обновления строки'
-    ) COMMENT 'Таблицы группы';
+) COMMENT 'Таблицы группы';
     
-    CREATE TABLE communities_users (
+CREATE TABLE communities_users (
 	community_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на группу',
 	user_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на пользователя',
 	PRIMARY KEY (community_id, user_id) COMMENT 'Составной первичный ключ',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата и время создания строки',
+    	created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата и время создания строки',
 	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Дата и время обновления строки'
-    ) COMMENT 'Участники групп, связь между пользователями и группами';
+) COMMENT 'Участники групп, связь между пользователями и группами';
     
 ALTER TABLE communities_users DROP CONSTRAINT communities_community_id;
 ALTER TABLE communities_users ADD CONSTRAINT communities_community_id FOREIGN KEY (community_id) REFERENCES communities(id);
 ALTER TABLE communities_users ADD CONSTRAINT communities_user_id FOREIGN KEY (user_id) REFERENCES users(id);
-DESCRIBE communities_users;
 
 CREATE TABLE messages (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор строки',
 	from_user_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на отправителя сообщения',
 	to_user_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на получателя сообщения',
-    body TEXT NOT NULL COMMENT 'Текст сообщения',
-    is_important BOOLEAN COMMENT 'Признак важности',
-    is_delivered BOOLEAN COMMENT 'Признак доставки',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата и время создания строки',
+    	body TEXT NOT NULL COMMENT 'Текст сообщения',
+    	is_important BOOLEAN COMMENT 'Признак важности',
+    	is_delivered BOOLEAN COMMENT 'Признак доставки',
+    	created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата и время создания строки',
 	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Дата и время обновления строки'
 ) COMMENT 'Таблица сообщений';
 
@@ -106,9 +105,9 @@ ALTER TABLE messages ADD CONSTRAINT messages_to_user_id FOREIGN KEY (to_user_id)
 DROP TABLE media;
 CREATE TABLE media (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор строки',
-    filename VARCHAR(255) NOT NULL COMMENT 'Полный путь к файлу',
+    	filename VARCHAR(255) NOT NULL COMMENT 'Полный путь к файлу',
 	media_type_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на тип файла',
-    metadata JSON NOT NULL COMMENT 'Метаданные файла',
+    	metadata JSON NOT NULL COMMENT 'Метаданные файла',
 	user_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на пользователя',
 	created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата и время создания строки',
 	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Дата и время обновления строки'
@@ -116,7 +115,7 @@ CREATE TABLE media (
 
 CREATE TABLE media_types (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор строки',
-    name VARCHAR(150) NOT NULL UNIQUE COMMENT 'Название типа',
+    	name VARCHAR(150) NOT NULL UNIQUE COMMENT 'Название типа',
 	created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата и время создания строки',
 	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Дата и время обновления строки'
 ) COMMENT 'Типы медиафайлов';
@@ -124,37 +123,48 @@ CREATE TABLE media_types (
 ALTER TABLE media ADD CONSTRAINT media_media_type_id FOREIGN KEY (media_type_id) REFERENCES media_types(id);
 ALTER TABLE media ADD CONSTRAINT media_to_user_id FOREIGN KEY (user_id) REFERENCES users(id);  
 
--- добавил таблицу постов
+-- Ниже исправленные таблицы по разбору ДЗ
 CREATE TABLE posts (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор строки',
-	post_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на пост',
-	body TEXT NOT NULL COMMENT 'Текст поста',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата и время создания строки',
+	user_id INT UNSIGNED COMMENT 'Ссылка на пользователя',
+	community_id INT UNSIGNED COMMENT 'Ссылка на сообщество',
+    	head VARCHAR(255) COMMENT 'Заголовок поста',
+    	body TEXT NOT NULL COMMENT 'Текст поста',
+    	media_id INT UNSIGNED COMMENT 'Ссылка на медиа',
+    	is_public BOOLEAN DEFAULT TRUE COMMENT 'Признак публичности',
+    	created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата и время создания строки',
 	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Дата и время обновления строки'
 ) COMMENT 'Таблица постов';
 
-ALTER TABLE posts ADD CONSTRAINT posts_post_id FOREIGN KEY (post_id) REFERENCES users(id);
-
---добавил таблицу лайков
-CREATE TABLE likes (
-	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор строки',
-    like_type_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на тип лайка',
-    user_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на пользователя',
+CREATE TABLE post_media (
+    post_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на пост',
+    media_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на медиа',
+    PRIMARY KEY(post_id,media_id) COMMENT 'Составной первичный ключ',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата и время создания строки',
-	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Дата и время обновления строки'
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Дата и время обновления строки'
+) COMMENT 'Связь медиа с постом ';
+
+ALTER TABLE posts ADD CONSTRAINT posts_user_id FOREIGN KEY (user_id) REFERENCES users(id);
+ALTER TABLE posts ADD CONSTRAINT posts_community_id FOREIGN KEY (community_id) REFERENCES communities(id);
+ALTER TABLE post_media ADD CONSTRAINT post_media_post_id FOREIGN KEY (post_id) REFERENCES posts(id);
+ALTER TABLE post_media ADD CONSTRAINT post_media_media_id FOREIGN KEY (media_id) REFERENCES media(id);
+
+CREATE TABLE likes (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор строки',
+    user_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на пользователя, который постваил лайк ',
+    target_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на лайкаемый объект',
+    target_type_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на тип лайкаемого объекта',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата и время создания строки',
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Дата и время обновления строки'
 ) COMMENT 'Таблица лайков';
 
-CREATE TABLE likes_types (
-	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор строки',
-    name VARCHAR(150) NOT NULL UNIQUE COMMENT 'Название типа',
-	created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата и время создания строки',
-	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Дата и время обновления строки'
-) COMMENT 'Типы лайков';
-
-ALTER TABLE likes ADD CONSTRAINT likes_like_type_id FOREIGN KEY (like_type_id) REFERENCES likes_types(id);
 ALTER TABLE likes ADD CONSTRAINT likes_user_id FOREIGN KEY (user_id) REFERENCES users(id);
 
-SHOW TABLES;
+CREATE TABLE target_types (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор строки',
+    name VARCHAR(150) NOT NULL UNIQUE COMMENT 'Название типа',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата и время создания строки',
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Дата и время обновления строки'
+) COMMENT 'Типы лайков';
 
-
-  
+ALTER TABLE likes ADD CONSTRAINT likes_target_type_id FOREIGN KEY (target_type_id) REFERENCES target_types(id);
