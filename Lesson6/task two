@@ -1,0 +1,124 @@
+-- Для начала определим с кем дружит выбранный мной юзер№26
+Use vk;
+SELECT * FROM friendship WHERE user_id = 26;
+
+-- видим, что в таблице только одна запись
+
+user_id|friend_id|request_type_id|requested_at       |confirmed_at       |created_at         |updated_at         |
+-------+---------+---------------+-------------------+-------------------+-------------------+-------------------+
+     26|        6|              1|2021-09-13 14:24:20|2021-09-13 14:24:20|2021-09-13 14:24:20|2021-09-13 14:24:20|
+     
+-- наполняю таблицу "друзьями" с типом подписки 1-friendship
+INSERT INTO friendship VALUES (26,21,1,NOW(),NOW(),NOW(),NOW()),
+															(26,12,1,NOW(),NOW(),NOW(),NOW()),
+															(26,32,1,NOW(),NOW(),NOW(),NOW()),
+															(26,6,1,NOW(),NOW(),NOW(),NOW()),
+															(26,55,1,NOW(),NOW(),NOW(),NOW()),
+															(26,63,1,NOW(),NOW(),NOW(),NOW()),
+															(26,74,1,NOW(),NOW(),NOW(),NOW()),
+															(26,28,1,NOW(),NOW(),NOW(),NOW()),
+															(26,41,1,NOW(),NOW(),NOW(),NOW());
+                             
+-- список друзей юзера№26
+SELECT user_id, friend_id, request_type_id FROM vk.friendship WHERE user_id = 26 AND request_type_id = 1;
+
+user_id|friend_id|request_type_id|
+-------+---------+---------------+
+     26|        6|              1|
+     26|       12|              1|
+     26|       21|              1|
+     26|       28|              1|
+     26|       32|              1|
+     26|       41|              1|
+     26|       55|              1|
+     26|       63|              1|
+     26|       74|              1|
+     26|       84|              1|
+     
+-- Далее смотрим таблицу messages и видим что запись всего одна
+
+id|from_user_id|to_user_id|body                                                                                                                                                                                             |is_important|is_delivered|created_at         |updated_at         |
+--+------------+----------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------+------------+-------------------+-------------------+
+26|          26|        26|Numquam placeat maxime velit occaecati. Ut tempore asperiores consequatur ad. Accusamus in aut tenetur fuga nostrum. Delectus quia eveniet distinctio. Ut voluptatem omnis asperiores cupiditate.|           0|           1|2002-05-16 16:06:23|1982-11-24 02:09:34|
+
+-- наполняем таблицу messages
+UPDATE messages SET to_user_id = 26 WHERE id < 35;
+UPDATE messages SET from_user_id = 55 WHERE id < 10;
+UPDATE messages SET from_user_id = 12 WHERE id > 10 AND id <17;
+UPDATE messages SET from_user_id = 41 WHERE id > 17 AND id <23;
+UPDATE messages SET from_user_id = 63 WHERE id > 23 AND id <30;
+UPDATE messages SET from_user_id = 21 WHERE id > 30 AND id <36;
+
+--список полученных сообщений юзером№26 от друзей
+
+id|from_user_id|to_user_id|
+--+------------+----------+
+ 1|          55|        26|
+ 2|          55|        26|
+ 3|          55|        26|
+ 4|          55|        26|
+ 5|          55|        26|
+ 6|          55|        26|
+ 7|          55|        26|
+ 8|          55|        26|
+ 9|          55|        26|
+10|          57|        26|
+11|          12|        26|
+12|          12|        26|
+13|          12|        26|
+14|          12|        26|
+15|          12|        26|
+16|          12|        26|
+17|          33|        26|
+18|          41|        26|
+19|          41|        26|
+20|          41|        26|
+21|          41|        26|
+22|          41|        26|
+23|          61|        26|
+24|          63|        26|
+25|          63|        26|
+26|          63|        26|
+27|          63|        26|
+28|          63|        26|
+29|          63|        26|
+30|          30|        26|
+31|          21|        26|
+32|          21|        26|
+33|          21|        26|
+34|          21|        26|
+
+-- Выявляем лидера по переписке
+SELECT
+	from_user_id AS АйДи_друга,
+	COUNT(*) AS Количество_сообщений
+FROM
+	messages
+WHERE 
+	to_user_id = 26
+GROUP BY
+	АйДи_друга 
+ORDER BY 
+	Количество_сообщений 
+DESC;
+
+-- Результирующая таблица
+
+АйДи_друга|Количество_сообщений|
+----------+--------------------+
+        55|                   9|
+        12|                   6|
+        63|                   6|
+        41|                   5|
+        21|                   4|
+        57|                   1|
+        33|                   1|
+        61|                   1|
+        30|                   1|
+
+-- оставляю одного победителя в таблице добавив в конце скрипта LIMIT
+SELECT	from_user_id AS АйДи_друга,	COUNT(*) AS Количество_сообщений FROM messages WHERE	to_user_id = 26 GROUP BY	АйДи_друга ORDER BY	Количество_сообщений DESC LIMIT 1;
+
+АйДи_друга|Количество_сообщений|
+----------+--------------------+
+        55|                   9|
