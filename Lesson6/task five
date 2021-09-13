@@ -1,0 +1,86 @@
+-- НЕ активность пользователя будем проверять по 5 таблицам, каждую будем связывать с таблицей users
+USE vk;
+SELECT * FROM messages;
+SELECT * FROM likes;
+SELECT * FROM posts;
+SELECT * FROM communities_users;
+SELECT * FROM media;
+
+-- 1. проверка сообщений, ставим 0 тем, кто не писал сообщения
+SELECT id, 0 AS active FROM users WHERE id NOT IN (SELECT from_user_id FROM messages GROUP BY from_user_id)
+UNION 
+SELECT from_user_id AS id, COUNT(*) AS active FROM messages GROUP BY from_user_id;
+
+-- 2. проверка лайков, ставим 0 тем, кто не ставил лайки
+SELECT id, 0 AS active FROM users WHERE id NOT IN (SELECT user_id FROM likes GROUP BY user_id)
+UNION 
+SELECT user_id AS id, COUNT(*) AS active FROM likes GROUP BY user_id;
+
+-- 3. проверка постов, ставим 0 тем, кто не писал посты
+SELECT id, 0 AS active FROM users WHERE id NOT IN (SELECT user_id FROM posts GROUP BY user_id)
+UNION 
+SELECT user_id AS id, COUNT(*) AS active FROM posts GROUP BY user_id;
+
+-- 4. проверка участия в сообществах, ставим 0 тем, кто не в одной группе 
+SELECT id, 0 AS active FROM users WHERE id NOT IN (SELECT user_id FROM communities_users GROUP BY user_id)
+UNION 
+SELECT user_id AS id, COUNT(*) AS active FROM communities_users GROUP BY user_id;
+
+-- 5. проверка медиа файлов, ставим 0 тем, кто не загрузил ни одного файла
+SELECT id, 0 AS active FROM users WHERE id NOT IN (SELECT user_id FROM media GROUP BY user_id)
+UNION 
+SELECT user_id AS id, COUNT(*) AS active FROM media GROUP BY user_id;
+
+-- 6. объеденяем все запросы
+SELECT id, SUM(active) AS total_active FROM (
+	SELECT * FROM (
+		(SELECT id, 0 AS active FROM users WHERE id NOT IN (SELECT from_user_id FROM messages GROUP BY from_user_id))
+		UNION
+		(SELECT from_user_id AS id, COUNT(*) AS active FROM messages GROUP BY from_user_id)
+	) AS table_messages	
+	UNION ALL
+	SELECT * FROM (
+		(SELECT id, 0 AS active FROM users WHERE id NOT IN (SELECT user_id FROM likes GROUP BY user_id))
+		UNION
+		(SELECT user_id AS id, COUNT(*) AS active FROM likes GROUP BY user_id)
+	) AS table_likes	
+	UNION ALL
+	SELECT * FROM (
+		(SELECT id, 0 AS active FROM users WHERE id NOT IN (SELECT user_id FROM posts GROUP BY user_id))
+		UNION
+		(SELECT user_id AS id, COUNT(*) AS active FROM posts GROUP BY user_id)	
+	) AS table_posts
+	UNION ALL
+	SELECT * FROM (
+		(SELECT id, 0 AS active FROM users WHERE id NOT IN (SELECT user_id FROM communities_users GROUP BY user_id))
+		UNION
+		(SELECT user_id AS id, COUNT(*) AS active FROM communities_users GROUP BY user_id)
+	) AS table_communities
+	UNION ALL	
+	SELECT * FROM (
+	(SELECT id, 0 AS active FROM users WHERE id NOT IN (SELECT user_id FROM media GROUP BY user_id))
+		UNION
+		(SELECT user_id AS id, COUNT(*) AS active FROM media GROUP BY user_id)
+	) AS table_media
+) AS temp_table
+GROUP BY id
+ORDER BY total_active
+LIMIT 10;
+
+-- результирующая таблица с 10 НЕ активными пользователями
++------+--------------+
+| id   | total_active |
++------+--------------+
+|   43 |            1 |
+|   46 |            1 |
+|   85 |            1 |
+|   92 |            1 |
+|   82 |            1 |
+|   51 |            1 |
+|   50 |            1 |
+|   72 |            1 |
+|   97 |            1 |
+|   87 |            1 |
++------+--------------+
+
+P.S. с 1 по 5 шаг таблицы не стал копировать, так как каждая таблица по 100 строк.
