@@ -1,0 +1,78 @@
+USE shop;
+
+-- создем таблицу и наполняем данными
+DROP TABLE IF EXISTS flights;
+CREATE TABLE flights (
+ id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+ `from` VARCHAR(255),
+ `to` VARCHAR(255)
+);
+INSERT INTO flights(`from`, `to`) VALUES
+ ('Moskow', 'Omsk'),
+ ('Novgorod', 'Kazan'),
+ ('Irkutsk', 'Moskow'),
+ ('Omsk', 'Irkutsk'),
+ ('Moskow', 'Kazan');
+
+SELECT * FROM flights;
++----+----------+---------+
+| id | from     | to      |
++----+----------+---------+
+|  1 | Moskow   | Omsk    |
+|  2 | Novgorod | Kazan   |
+|  3 | Irkutsk  | Moskow  |
+|  4 | Omsk     | Irkutsk |
+|  5 | Moskow   | Kazan   |
++----+----------+---------+
+
+-- создем таблицу и наполняем данными
+DROP TABLE IF EXISTS cities;
+CREATE TABLE cities (
+ label VARCHAR(255),
+ `name` VARCHAR(255)
+);
+INSERT INTO cities VALUES
+ ('Moskow', 'Москва'),
+ ('Novgorod', 'Новгород'),
+ ('Irkutsk', 'Иркутск'),
+ ('Omsk', 'Омск'),
+ ('Kazan', 'Казань');
+SELECT * FROM cities;
++----------+----------+
+| label    | name     |
++----------+----------+
+| Moskow   | Москва   |
+| Novgorod | Новгород |
+| Irkutsk  | Иркутск  |
+| Omsk     | Омск     |
+| Kazan    | Казань   |
++----------+----------+
+
+-- при помощи функции CASE производим подмену eng -> ru
+SELECT
+   id AS '№',
+   CASE
+	WHEN `from` = 'Moskow' THEN 'Москва'
+	WHEN `from` = 'Novgorod' THEN 'Новгород'
+	WHEN `from` = 'Irkutsk' THEN 'Иркутск'
+	WHEN `from` = 'Omsk' THEN 'Омск'
+	WHEN `from` = 'Kazan' THEN 'Казань'
+    END AS 'откуда',
+    CASE
+	WHEN `to` = 'Moskow' THEN 'Москва'
+	WHEN `to` = 'Novgorod' THEN 'Новгород'
+	WHEN `to` = 'Irkutsk' THEN 'Иркутск'
+	WHEN `to` = 'Omsk' THEN 'Омск'
+	WHEN `to` = 'Kazan' THEN 'Казань'
+    END AS 'куда'
+FROM
+  flights;
++----+----------+---------+
+| №  | откуда   | куда    |
++----+----------+---------+
+|  1 | Москва   | Омск    |
+|  2 | Новгород | Казань  |
+|  3 | Иркутск  | Москва  |
+|  4 | Омск     | Иркутск |
+|  5 | Москва   | Казань  |
++----+----------+---------+ 
