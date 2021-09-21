@@ -1,0 +1,46 @@
+-- *** План действий ***
+-- Возьмем таблицу users и из нее будем брать ИМЯ и ФАМИЛИЮ моего выбранного пользователя (id = 26);
+-- Из таблицы messages получаем список пользователей, которые отправляли сообщения моему пользователю;
+-- Под "общением" будем понимать количество отправленных сообщений моему выбранному пользователю, даже если на них мой пользователь не ответил;
+-- При выборе JOIN представил таблицу messages и таблицу users, стало ясно, что связь осуществляется через from_user_id -> id;
+-- Дальше в messages смотрю данные по полю to_user_id и вижу что получателем может быть любой пользователь, поэтому всю таблицу брать не нужно;
+-- При помощи INNER JOIN выберем получателя c id = 26 в таблице messages  и соединим с таблицей users и выполним условие задачи по отбору одного самого активного пользователя;
+
+SELECT 	
+	m.from_user_id AS user_id,	
+	u.first_name AS name,
+	u.last_name AS surname,
+	count(1) AS counter
+FROM
+	messages m
+INNER JOIN users u ON
+	(
+	m.from_user_id = u.id  
+)
+WHERE
+	m.to_user_id = 26
+GROUP BY
+	m.from_user_id
+ORDER BY
+	counter DESC
+LIMIT 1;
+
+
+-- это таблица результат скрипта
+user_id|name    |surname    |counter|
+-------+--------+-----------+-------+
+     55|Chance  |Schneider  |      9|
+
+
+-- эта таблица без LIMIT для общей картины
+user_id|name    |surname    |counter|
+-------+--------+-----------+-------+
+     55|Chance  |Schneider  |      9|
+     12|Julio   |Homenick   |      6|
+     63|Kylee   |Heidenreich|      6|
+     41|Fernando|Toy        |      5|
+     21|Rogelio |Kulas      |      4|
+     27|Bridie  |Pollich    |      1|
+     71|Veda    |Kreiger    |      1|
+     81|Chad    |Kirlin     |      1|
+     13|Aliyah  |Dibbert    |      1|
