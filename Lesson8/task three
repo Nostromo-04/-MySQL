@@ -1,0 +1,42 @@
+-- *** План действий ***
+-- 1. Из таблицы users нам понадобится признак по полу gender;
+-- 2. Из таблицы likes по полю user_id будем связывать с таблицей users;
+-- 3. Так как таблица likes состоит из записей о лайках и
+--    каждая строка это отссылка к юзеру, который поставил лайк,
+--    поэтому таблицу likes берем полностью(LEFT JOIN) и выбираем совпадения из таблицы users; 
+
+WITH winner AS(
+SELECT
+	u.gender,
+	count(1) AS counter
+FROM 
+	likes l
+LEFT JOIN users u ON
+	(
+	l.user_id = u.id 
+)
+WHERE
+	u.gender = 'M'
+UNION
+SELECT
+	u.gender,
+	count(1) AS counter
+FROM 
+	likes l
+LEFT JOIN users u ON
+	(
+	l.user_id = u.id 
+)
+WHERE
+	u.gender = 'F')
+SELECT
+	w.gender,
+	w.counter
+FROM
+	winner w
+INNER JOIN users u2 ON
+	(
+w.gender = u2.gender 
+)
+GROUP BY w.gender
+LIMIT 1;
