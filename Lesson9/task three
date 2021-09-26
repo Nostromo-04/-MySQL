@@ -1,0 +1,21 @@
+SELECT curtime(); -- определяем текущее время 
+
+DELIMITER //
+CREATE FUNCTION hello()
+RETURNS TINYTEXT READS SQL DATA
+BEGIN
+	DECLARE hours INT;
+	SET hours = HOUR(curtime());
+	CASE
+		WHEN hours BETWEEN 0 AND 5 THEN 
+		RETURN 'Доброй ночи';
+		WHEN hours BETWEEN 6 AND 11 THEN 
+		RETURN 'Доброе утро';
+		WHEN hours BETWEEN 12 AND 17 THEN 
+		RETURN 'Добрый день';
+		WHEN hours BETWEEN 18 AND 23 THEN 
+		RETURN 'Добрый вечер';
+	END CASE;
+END
+DELIMITER ;
+SELECT hello();
