@@ -1,0 +1,26 @@
+-- подготовка к решению задачи
+SELECT * FROM shop.products;
+SELECT * FROM shop.catalogs;
+
+SELECT 
+	shop.p.name,
+	shop.c.name
+FROM shop.products p 
+LEFT JOIN shop.catalogs c ON(
+shop.p.catalog_id = shop.c.id
+);
+-- конец подготовки к решению задачи
+
+-- решение задачи
+CREATE OR REPLACE VIEW shop.products_view AS -- создаем представление
+SELECT
+	shop.p.name AS name_product, -- вывести столбик name из таблицы products
+	shop.c.name AS name_catalog  -- вывести столбик name из таблицы catalogs
+FROM
+	shop.products p
+LEFT JOIN shop.catalogs c ON -- соединяем две таблицы products и catalogs
+	(
+shop.p.catalog_id = shop.c.id -- по условию catalog_id = id
+);
+
+SELECT * FROM shop.products_view; -- вызов представления
