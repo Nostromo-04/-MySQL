@@ -1,0 +1,21 @@
+DELIMITER // 
+CREATE TRIGGER check_insert BEFORE INSERT ON products -- триггер на вставку
+FOR EACH ROW
+BEGIN 
+	IF NEW.name IS NULL AND NEW.description IS NULL THEN -- условие: не должно быть пустым поле
+		SIGNAL SQLSTATE '45000' -- генерируем пользовательскую ошибку
+		SET message_text = 'Name и Description не должны быть пустыми'; -- присваиваем значение ошибке
+	END IF;
+END
+DELIMITER ;
+
+DELIMITER // 
+CREATE TRIGGER check_update BEFORE UPDATE ON products -- триггер на обновление
+FOR EACH ROW
+BEGIN 
+	IF NEW.name IS NULL OR NEW.description IS NULL THEN -- условие не должно быть пустым поле
+		SIGNAL SQLSTATE '45000' -- генерируем пользовательскую ошибку
+		SET message_text = 'Name и Description не должны быть пустыми'; -- присваиваем значение ошибке
+	END IF;
+END
+DELIMITER ;
