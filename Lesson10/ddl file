@@ -1,0 +1,131 @@
+/* Проект базы данных интернет-магазина.
+ * Функционал, сущности и атрибуты представлены в том виде,
+ * в котором я их задумал. Возможно это не последний вариант БД. */
+
+DROP DATABASE IF EXISTS im;
+CREATE DATABASE im;
+USE im;
+
+DROP TABLE IF EXISTS buyers;
+CREATE TABLE buyers(
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор покупателя',
+	first_name VARCHAR(100) NOT NULL COMMENT 'Имя покупателя',
+	last_name VARCHAR(100) NOT NULL COMMENT 'Фамилия покупателя',
+	birthday DATE COMMENT 'Дата рождения покупателя',
+	email VARCHAR(100) NOT NULL UNIQUE COMMENT 'Эл.почта покупателя',
+	phone VARCHAR(15) NOT NULL UNIQUE COMMENT 'Телефон покупателя',
+	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) COMMENT 'Таблица покупателя';
+
+DROP TABLE IF EXISTS products;
+CREATE TABLE products (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор товара',
+	catalog_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на категорию товара', 
+	picture_id INT UNSIGNED COMMENT 'Ссылка на изображение товара',
+	name VARCHAR(255) NOT NULL COMMENT 'Наименование товара',
+	description VARCHAR(255) COMMENT 'Описание товара',
+	price DECIMAL (11,2) COMMENT 'Цена товара',
+	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) COMMENT 'Таблица товаров';
+
+DROP TABLE IF EXISTS catalogs;
+CREATE TABLE catalogs( 
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор каталога',
+	parent_id INT UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Ссылка на родительский каталог', -- проверить связь
+ 	name VARCHAR(100) NOT NULL COMMENT 'Название каталога'
+) COMMENT 'Таблица каталогов';
+
+DROP TABLE IF EXISTS pictures;
+CREATE TABLE pictures(
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор картинки товара',
+	product_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на товар, которому принадлежит картинка', 
+	file_name VARCHAR(255) NOT NULL COMMENT 'Имя файла картинки',
+	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) COMMENT 'Таблица картинок товаров';
+
+DROP TABLE IF EXISTS discounts;
+CREATE TABLE discounts (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор скидки на товар',
+	product_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на товар',
+	discount DECIMAL(11,1) UNSIGNED COMMENT 'Величина скидки от 0.0 до 1.0',
+	start_at DATETIME COMMENT 'Дата начала действия скидки',
+	stop_at DATETIME COMMENT 'Дата окончания действия скидки',
+	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) COMMENT 'Таблица скидок';
+
+DROP TABLE IF EXISTS reviews;
+CREATE TABLE reviews(
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор отзыва на товар',
+	buyer_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на покупателя',
+	product_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на товар',
+	quality ENUM('1', '2', '3', '4', '5') NOT NULL COMMENT 'Качество товара',
+	description VARCHAR(255) COMMENT 'Отзыв на товар',
+	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) COMMENT 'Таблица отзывов';
+
+ALTER TABLE products DROP CONSTRAINT products_catalog_id;
+ALTER TABLE products ADD CONSTRAINT products_catalog_id FOREIGN KEY (catalog_id) REFERENCES catalogs(id);
+ALTER TABLE products DROP CONSTRAINT products_picture_id;
+ALTER TABLE products ADD CONSTRAINT products_picture_id FOREIGN KEY (picture_id) REFERENCES pictures(id);
+ALTER TABLE pictures DROP CONSTRAINT pictures_picture_id;
+ALTER TABLE pictures ADD CONSTRAINT pictures_picture_id FOREIGN KEY (product_id) REFERENCES products(id);
+ALTER TABLE discounts DROP CONSTRAINT discounts_product_id;
+ALTER TABLE discounts ADD CONSTRAINT discounts_product_id FOREIGN KEY (product_id) REFERENCES products(id);
+ALTER TABLE reviews DROP CONSTRAINT reviews_buyer_id;
+ALTER TABLE reviews ADD CONSTRAINT reviews_buyer_id FOREIGN KEY (buyer_id) REFERENCES buyers(id);
+ALTER TABLE reviews DROP CONSTRAINT reviews_product_id;
+ALTER TABLE reviews ADD CONSTRAINT reviews_product_id FOREIGN KEY (product_id) REFERENCES products(id);
+
+DROP TABLE IF EXISTS warehouses;
+CREATE TABLE warehouses(
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор склада',
+	name VARCHAR(50) NOT NULL COMMENT 'Название склада',
+	address VARCHAR(100) NOT NULL COMMENT 'Адрес склада',
+	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) COMMENT 'Таблица складов/магазинов';
+
+DROP TABLE IF EXISTS warehouse_products;
+CREATE TABLE warehouse_products(
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор картинки товара',
+	warehouse_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на склад',
+	product_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на товар',
+ 	quantity INT UNSIGNED COMMENT 'Количество товара на складе',
+	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) COMMENT 'Таблица товаров на складе';
+
+ALTER TABLE warehouse_products ADD CONSTRAINT warehouse_products_warehouse_id;
+ALTER TABLE warehouse_products ADD CONSTRAINT warehouse_products_warehouse_id FOREIGN KEY (warehouse_id) REFERENCES warehouses(id);
+ALTER TABLE warehouse_products ADD CONSTRAINT warehouse_products_product_id;
+ALTER TABLE warehouse_products ADD CONSTRAINT warehouse_products_product_id FOREIGN KEY (product_id) REFERENCES products(id);
+
+DROP TABLE IF EXISTS orders;
+CREATE TABLE orders (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор заказа',
+	buyer_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на покупателя',
+	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) COMMENT 'Таблица заказов';
+
+DROP TABLE IF EXISTS orders_products;
+CREATE TABLE orders_products (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор товаров в заказе',
+	order_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на заказ',
+	product_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на товар',
+	quantity INT UNSIGNED DEFAULT 1 COMMENT 'Количество товара в заказе',
+	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) COMMENT 'Таблица наполнения заказа';
+
+ALTER TABLE orders ADD CONSTRAINT orders_buyer_id;
+ALTER TABLE orders ADD CONSTRAINT orders_buyer_id FOREIGN KEY (buyer_id) REFERENCES buyers(id);
+ALTER TABLE orders_products ADD CONSTRAINT orders_products_order_id;
+ALTER TABLE orders_products ADD CONSTRAINT orders_products_order_id FOREIGN KEY (order_id) REFERENCES orders(id);
+ALTER TABLE orders_products ADD CONSTRAINT orders_products_order_id;
+ALTER TABLE orders_products ADD CONSTRAINT orders_products_product_id FOREIGN KEY (product_id) REFERENCES products(id);
