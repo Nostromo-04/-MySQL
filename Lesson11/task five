@@ -1,0 +1,58 @@
+>USE shop
+switched to db shop
+
+>db.createCollection('catalogs') -- создаем коллекцию категорий
+{"ok" : 1}
+>db.createCollection('products') -- создаем коллекцию товаров
+{"ok" : 1}
+
+>show tables -- проверяем наличие созданных коллекций
+catalogs
+products
+
+>db.catalogs.insert({name: 'Процессоры'}) -- вставляем категории
+WriteResult({"nInserted" : 1 })
+>db.catalogs.insert({name: 'Мат.платы'})
+WriteResult({"nInserted" : 1 })
+>db.catalogs.insert({name: 'Видеокарты'})
+WriteResult({"nInserted" : 1 })
+
+>db.catalogs.find() -- смотрим содержимое коллекции catalogs
+{"_id" : ObjectId("4b45d76f34t300678sdfr20a"), "name" : "Процессоры" }
+{"_id" : ObjectId("4b45d76f58t300678sdfr20d"), "name" : "Мат.платы" }
+{"_id" : ObjectId("4b45d99f34t300678sdfr20c"), "name" : "Видеокарты" }
+
+>db.poducts.insert( -- вставляем товары
+... {
+...		name: 'Intel Core i3-8100',
+...		description: 'Процессор Intel',
+...		price: 7890.00,
+...		catalog_id: NEW ObjectId("4b45d76f34t300678sdfr20a") -- NEW ObjectId("ссылка на id Процессоры") 
+... }
+...) 
+WriteResult({"nInserted" : 1 })
+
+>db.poducts.insert( -- вставляем товары
+... {
+...		name: 'Intel Core i5-7400',
+...		description: 'Процессор Intel',
+...		price: 12700.00,
+...		catalog_id: NEW ObjectId("4b45d76f34t300678sdfr20a") -- NEW ObjectId("ссылка на id Процессоры")
+... }
+...) 
+WriteResult({"nInserted" : 1 })
+
+>db.poducts.insert( -- вставляем товары
+... {
+...		name: 'ASUS ROG MAXIMUS',
+...		description: 'Материнская плата ASUS',
+...		price: 19310.00,
+...		catalog_id: NEW ObjectId("4b45d76f58t300678sdfr20d") -- NEW ObjectId("ссылка на id Мат.платы")
+... }
+...) 
+WriteResult({"nInserted" : 1 })
+
+>db.products.find() -- смотрим содержимое коллекции products
+{"_id" : ObjectId("5b67a76f34t567678sdfr28k"), "name" : "Intel Core i3-8100", "description" : "Процессор Intel", "price" : "7890.00", "catalog_id" : "4b45d76f34t300678sdfr20a"}
+{"_id" : ObjectId("5b67a76f34t567125sdfr29s"), "name" : "Intel Core i5-7400", "description" : "Процессор Intel", "price" : "12700.00", "catalog_id" : "4b45d76f34t300678sdfr20a"}
+{"_id" : ObjectId("5b67a76f34t562378sdfr15p"), "name" : "ASUS ROG MAXIMUS", "description" : "Материнская плата ASUS", "price" : "19310.00", "catalog_id" : "4b45d76f58t300678sdfr20d"}
