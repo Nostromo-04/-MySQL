@@ -1,0 +1,31 @@
+USE shop;
+SELECT * FROM users;
+DESC users;
+
+-- Создаю копию таблицы users, в ней буду создавать 1 млн.записей
+DROP TABLE IF EXISTS users_one_million;
+	CREATE TABLE users_one_million(
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	name VARCHAR(255) NOT NULL,
+	birthday_at DATE NOT NULL,
+	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+-- Используя свойства CROSS JOIN складываю таблицы друг с другом 
+INSERT INTO
+	users_one_million(name, birthday_at)
+SELECT 
+	fst.name,
+	fst.birthday_at 
+FROM
+	users AS fst,
+	users AS snd,
+	users AS thd,
+	users AS fth,
+	users AS fif,
+	users AS sth;
+
+SELECT count(1) FROM users_one_million;
+count(1)|
+--------+
+ 1000000|
