@@ -1,0 +1,60 @@
+USE shop;
+
+-- создаем таблицу logs
+DROP TABLE IF EXISTS logs;
+CREATE TABLE logs (
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор лога',
+	created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Время и дата создания записи',
+ 	table_name VARCHAR(8) NOT NULL COMMENT 'Имя таблицы',
+	key_id INT UNSIGNED NOT NULL COMMENT 'Идентификатор в таблице',
+	rows_name VARCHAR(255) COMMENT 'Имя выбранной строки в таблице'
+) COMMENT 'Таблица логов' ENGINE = ARCHIVE; -- используем движок ARCHIVE
+
+-- для заполнения таблицы logs будем использовать триггеры с условием AFTER INSERT для каждой таблицы
+-- создаем триггер на условие После_Вставки в таблицу users
+DELIMITER //
+DROP TRIGGER IF EXISTS users_insert//
+CREATE TRIGGER users_insert AFTER INSERT ON users
+FOR EACH ROW
+BEGIN
+	INSERT INTO logs (table_name, key_id, rows_name) VALUES ('users', NEW.id, NEW.name);
+END
+DELIMITER ;
+
+-- создаем триггер на условие После_Вставки в таблицу catalogs
+DELIMITER //
+DROP TRIGGER IF EXISTS catalogs_insert//
+CREATE TRIGGER catalogs_insert AFTER INSERT ON catalogs
+FOR EACH ROW
+BEGIN
+	INSERT INTO logs (table_name, key_id, rows_name) VALUES ('catalogs', NEW.id, NEW.name);
+END
+DELIMITER ;
+
+-- создаем триггер на условие После_Вставки в таблицу products
+DELIMITER //
+DROP TRIGGER IF EXISTS products_insert//
+CREATE TRIGGER products_insert AFTER INSERT ON products
+FOR EACH ROW
+BEGIN
+	INSERT INTO logs (table_name, key_id, rows_name) VALUES ('products', NEW.id, NEW.name);
+END
+DELIMITER ;
+
+-- проверяем работу триггеров
+INSERT INTO users (name, birthday_at) VALUES ('Татьяна', '1996-05-25');
+INSERT INTO catalogs (name) VALUES ('Процессоры'), ('Материнская плата');
+INSERT INTO products (name, description) VALUES ('AMD Ryzen 5 3600', 'Процессор для настольных персональных компьютеров, основанных на платформе AMD.'),
+																								('AMD EPYC 7501', 'Процессор для настольных персональных компьютеров, основанных на платформе AMD.'),
+																								('ASUS ROG MAXIMUS X HERO', ' материнская плата ASUS ROG MAXIMUS X HERO');
+-- проверяем на заполнение таблицу logs
+SELECT * FROM logs;
+
+id|created_at         |table_name|key_id|rows_name              |
+--+-------------------+----------+------+-----------------------+
+ 1|2021-10-02 09:47:24|users     |     7|Татьяна                |
+ 2|2021-10-02 10:10:11|catalogs  |     7|Процессоры             |
+ 3|2021-10-02 10:10:11|catalogs  |     8|Материнская плата      |
+ 4|2021-10-02 10:11:25|products  |    10|AMD Ryzen 5 3600       |
+ 5|2021-10-02 10:11:25|products  |    11|AMD EPYC 7501          |
+ 6|2021-10-02 10:11:25|products  |    12|ASUS ROG MAXIMUS X HERO|
