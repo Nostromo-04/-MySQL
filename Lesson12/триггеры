@@ -1,0 +1,73 @@
+USE im;
+
+-- 1.Триггер: проверяет остаток товара на складе перед вставкой в заказ,
+-- в случае превышения выдает ошибку.  
+DROP TRIGGER IF EXISTS check_quantity_product;
+DELIMITER //
+CREATE TRIGGER check_quantity_product AFTER INSERT ON orders_products
+FOR EACH ROW
+BEGIN
+	DECLARE quantity_total INT DEFAULT 0;
+	SELECT SUM(quantity) INTO quantity_total FROM warehouse_products WHERE product_id = new.product_id;	
+		IF new.quantity > quantity_total THEN
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ERROR: There is not enough remaining stock in the warehouse';
+		END IF;
+END
+DELIMITER ;
+
+-- подготовка
+SELECT * FROM warehouse_products;
+SELECT * FROM orders_products;
+SELECT * FROM orders;
+INSERT INTO orders(buyer_id) VALUES (10);
+-- проверка
+SELECT * FROM warehouse_products wp WHERE product_id = 1; -- смотрим наличие товара 
+SELECT product_id, quantity FROM warehouse_products WHERE product_id = 1; -- подсчитываем общее количество 1500
+INSERT INTO orders_products(order_id, product_id, quantity) VALUES(61, 1, 2000); -- строка не вставляется, так как количество больше остатка
+
+********************************************************************************************************************************************
+
+-- 2.Триггер: обновляет количество товара на складе после продажи 
+DROP TRIGGER IF EXISTS update_quantity_product;
+DELIMITER //
+CREATE TRIGGER update_quantity_product BEFORE INSERT ON orders_products
+FOR EACH ROW
+BEGIN
+	DECLARE prod_id, prod_quantity, wrh_quantity INT;
+	SET prod_id = new.product_id;
+	SET prod_quantity = new.quantity;
+		SELECT quantity INTO wrh_quantity FROM warehouse_products WHERE product_id = prod_id;
+			IF wrh_quantity >= prod_quantity THEN 
+				UPDATE warehouse_products SET quantity = quantity - prod_quantity WHERE product_id = prod_id;
+			END IF;
+END 
+DELIMITER ;
+
+-- подготовка
+SELECT * FROM warehouse_products;
+SELECT * FROM orders_products;
+SELECT * FROM orders;
+-- проверка
+SELECT * FROM warehouse_products wp WHERE product_id = 3; -- смотрим наличие товара 
+SELECT product_id, SUM(quantity) FROM warehouse_products WHERE product_id = 3; -- подсчитываем общее количество 1000
+INSERT INTO orders_products(order_id, product_id, quantity) VALUES(61, 3, 200); -- списываем количество товара на складе 1000 - 200 = 800
+
+********************************************************************************************************************************************
+
+-- 3. Триггер: проверяет, чтобы описание товара было заполнено
+DROP TRIGGER IF EXISTS check_description_reviews;
+DELIMITER //
+CREATE TRIGGER check_description_reviews BEFORE INSERT ON reviews
+FOR EACH ROW
+BEGIN
+	DECLARE desc_reviews VARCHAR(255);
+		SELECT description INTO desc_reviews FROM reviews WHERE description = NEW.description;
+			IF NEW.description IS NULL THEN 
+				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ERROR: The description must be filled in';
+			END IF;
+END 
+DELIMITER ;
+
+-- проверка
+INSERT INTO reviews(buyer_id, product_id, quality, description) VALUES(9, 4, '5', NULL); -- пустая строка описания товара не вставляется
+SELECT * FROM reviews;
