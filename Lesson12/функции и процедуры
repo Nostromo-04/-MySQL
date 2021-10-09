@@ -1,0 +1,55 @@
+USE im;
+
+-- 1.Функция: рассчет скидки на товар, переданной ввиде аргумента 
+DROP FUNCTION IF EXISTS disc_price;
+DELIMITER //
+CREATE FUNCTION calc_discount (disc_id INT)
+RETURNS DECIMAL (11,1) DETERMINISTIC
+BEGIN
+	DECLARE prod_id INT;
+	DECLARE old_price, disc, new_price FLOAT;
+	SET prod_id = (SELECT product_id FROM discounts WHERE id = disc_id);
+	SET old_price = (SELECT price FROM products WHERE id = prod_id);
+	SET disc = (SELECT discount FROM discounts WHERE id = disc_id);
+	SET new_price = old_price - old_price * disc;
+	RETURN new_price;
+END
+DELIMITER ;
+
+-- вызываем функцию
+SELECT calc_discount(4);
+-- в выборку добавляем для наглядности поля Старая цена, Скидка и Новая цена 
+SELECT 
+	p.price AS old_price,	
+	(SELECT discount FROM discounts WHERE id = 4) AS discount,
+	calc_discount(4) AS new_price
+ FROM 
+ 	products p
+ WHERE p.id = (SELECT product_id FROM discounts WHERE id = 4);
+
+***************************************************************************************
+
+-- 1.Процедура: добавляет в таблицу discounts новую запись, назначая ей скидку на товар
+DROP PROCEDURE IF EXISTS setting_discount;
+DELIMITER // 
+CREATE PROCEDURE setting_discount (IN product_id INT, IN discount DECIMAL(11,1))
+BEGIN 
+    DECLARE prod_id INT;
+    DECLARE disc DECIMAL(11,1);
+ 		DECLARE start_at, stop_at DATETIME;
+	 	SET prod_id = product_id;
+   	SET disc = discount;
+   	SET start_at = NOW();
+   	SET stop_at = DATE_ADD(NOW(),INTERVAL 1 MONTH);
+   		IF disc IS NULL THEN 
+   			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ERROR: The discount cannot be zero';
+   		ELSE
+   			INSERT INTO discounts(product_id, discount,start_at, stop_at) VALUES(prod_id, disc, start_at, stop_at);
+   		END IF;
+END
+DELIMITER ;
+
+-- проверка
+CALL setting_discount(2, 0.6); -- строка вставляется
+CALL setting_discount(3, NULL); -- выдает ошибку
+SELECT * FROM discounts;
