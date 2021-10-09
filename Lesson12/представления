@@ -1,0 +1,56 @@
+ USE im;
+
+-- 1.Представление: список складов с общим количеством хранимого остатка товара
+CREATE OR REPLACE VIEW shops_products_total AS
+	SELECT 
+		w.name AS warehouse_name,
+		w.address AS warehouse_address,
+		SUM(wp.quantity) AS total_products
+	FROM 
+	  warehouses w
+	INNER JOIN warehouse_products wp ON
+	  (w.id = wp.warehouse_id) 
+	GROUP BY 
+		wp.warehouse_id;
+
+SELECT * FROM shops_products_total;
+
+*******************************************************************************
+-- 2.Представление: Прайс-лист с ценами и остатками по складам
+CREATE OR REPLACE VIEW price_list AS
+	SELECT
+	 	w.name AS warehouse_name,
+	 	w.address AS warehouse_address,
+	 	p.name AS products,
+	 	p.price,
+	 	wp.quantity 
+	FROM
+		products p 
+	INNER JOIN warehouse_products wp ON
+		(p.id = wp.product_id)
+	INNER JOIN warehouses w ON
+		(wp.warehouse_id = w.id);
+
+SELECT * FROM price_list; 
+
+*******************************************************************************
+-- 3.Представление: Продажи за весь период в разрезе покупателей
+CREATE OR REPLACE VIEW sales_by AS
+	SELECT 
+		CONCAT(b.first_name, ' ', b.last_name) AS bayers, 
+		CONCAT('Order №', o.id )AS orders,
+		op.quantity,
+		p.price,
+		op.quantity * p.price AS total
+	FROM 
+		orders_products op 
+	INNER JOIN orders o ON
+		(op.order_id = o.id)
+	INNER JOIN buyers b ON
+		(o.buyer_id = b.id)
+	INNER JOIN products p ON
+		(op.product_id = p.id)
+	ORDER BY 
+		op.order_id;
+
+SELECT * FROM sales_by; 
