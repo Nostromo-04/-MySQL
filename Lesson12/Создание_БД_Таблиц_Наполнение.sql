@@ -1,71 +1,71 @@
-/* Проект базы данных интернет-магазина.
- * Функционал, сущности и атрибуты представлены в том виде,
- * в котором я их задумал. Возможно это не последний вариант БД. */
+/* РџСЂРѕРµРєС‚ Р±Р°Р·С‹ РґР°РЅРЅС‹С… РёРЅС‚РµСЂРЅРµС‚-РјР°РіР°Р·РёРЅР°.
+ * Р¤СѓРЅРєС†РёРѕРЅР°Р», СЃСѓС‰РЅРѕСЃС‚Рё Рё Р°С‚СЂРёР±СѓС‚С‹ РїСЂРµРґСЃС‚Р°РІР»РµРЅС‹ РІ С‚РѕРј РІРёРґРµ,
+ * РІ РєРѕС‚РѕСЂРѕРј СЏ РёС… Р·Р°РґСѓРјР°Р». Р’РѕР·РјРѕР¶РЅРѕ СЌС‚Рѕ РЅРµ РїРѕСЃР»РµРґРЅРёР№ РІР°СЂРёР°РЅС‚ Р‘Р”. */
 
 DROP DATABASE IF EXISTS im;
 CREATE DATABASE im;
 USE im;
 
--- 1 блок: создание таблиц, связей и ограничений
+-- 1 Р±Р»РѕРє: СЃРѕР·РґР°РЅРёРµ С‚Р°Р±Р»РёС†, СЃРІСЏР·РµР№ Рё РѕРіСЂР°РЅРёС‡РµРЅРёР№
 DROP TABLE IF EXISTS buyers;
 CREATE TABLE buyers(
-	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор покупателя',
-	first_name VARCHAR(100) NOT NULL COMMENT 'Имя покупателя',
-	last_name VARCHAR(100) NOT NULL COMMENT 'Фамилия покупателя',
-	birthday DATE COMMENT 'Дата рождения покупателя',
-	email VARCHAR(100) NOT NULL UNIQUE COMMENT 'Эл.почта покупателя',
-	phone VARCHAR(16) NOT NULL UNIQUE COMMENT 'Телефон покупателя',
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїРѕРєСѓРїР°С‚РµР»СЏ',
+	first_name VARCHAR(100) NOT NULL COMMENT 'РРјСЏ РїРѕРєСѓРїР°С‚РµР»СЏ',
+	last_name VARCHAR(100) NOT NULL COMMENT 'Р¤Р°РјРёР»РёСЏ РїРѕРєСѓРїР°С‚РµР»СЏ',
+	birthday DATE COMMENT 'Р”Р°С‚Р° СЂРѕР¶РґРµРЅРёСЏ РїРѕРєСѓРїР°С‚РµР»СЏ',
+	email VARCHAR(100) NOT NULL UNIQUE COMMENT 'Р­Р».РїРѕС‡С‚Р° РїРѕРєСѓРїР°С‚РµР»СЏ',
+	phone VARCHAR(16) NOT NULL UNIQUE COMMENT 'РўРµР»РµС„РѕРЅ РїРѕРєСѓРїР°С‚РµР»СЏ',
 	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) COMMENT 'Таблица покупателей';
+) COMMENT 'РўР°Р±Р»РёС†Р° РїРѕРєСѓРїР°С‚РµР»РµР№';
 
 DROP TABLE IF EXISTS products;
 CREATE TABLE products (
-	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор товара',
-	catalog_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на категорию товара', 
-	picture_id INT UNSIGNED COMMENT 'Ссылка на изображение товара',
-	name VARCHAR(255) NOT NULL COMMENT 'Наименование товара',
-	description VARCHAR(255) COMMENT 'Описание товара',
-	price DECIMAL (11,2) COMMENT 'Цена товара',
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ С‚РѕРІР°СЂР°',
+	catalog_id INT UNSIGNED NOT NULL COMMENT 'РЎСЃС‹Р»РєР° РЅР° РєР°С‚РµРіРѕСЂРёСЋ С‚РѕРІР°СЂР°', 
+	picture_id INT UNSIGNED COMMENT 'РЎСЃС‹Р»РєР° РЅР° РёР·РѕР±СЂР°Р¶РµРЅРёРµ С‚РѕРІР°СЂР°',
+	name VARCHAR(255) NOT NULL COMMENT 'РќР°РёРјРµРЅРѕРІР°РЅРёРµ С‚РѕРІР°СЂР°',
+	description VARCHAR(255) COMMENT 'РћРїРёСЃР°РЅРёРµ С‚РѕРІР°СЂР°',
+	price DECIMAL (11,2) COMMENT 'Р¦РµРЅР° С‚РѕРІР°СЂР°',
 	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) COMMENT 'Таблица товаров';
+) COMMENT 'РўР°Р±Р»РёС†Р° С‚РѕРІР°СЂРѕРІ';
 
 DROP TABLE IF EXISTS catalogs;
 CREATE TABLE catalogs( 
-	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор каталога',
-	name VARCHAR(100) NOT NULL COMMENT 'Название каталога'
-) COMMENT 'Таблица каталогов';
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РєР°С‚Р°Р»РѕРіР°',
+	name VARCHAR(100) NOT NULL COMMENT 'РќР°Р·РІР°РЅРёРµ РєР°С‚Р°Р»РѕРіР°'
+) COMMENT 'РўР°Р±Р»РёС†Р° РєР°С‚Р°Р»РѕРіРѕРІ';
 
 DROP TABLE IF EXISTS pictures;
 CREATE TABLE pictures(
-	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор картинки товара',
-	file_name VARCHAR(255) NOT NULL COMMENT 'Имя файла картинки',
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РєР°СЂС‚РёРЅРєРё С‚РѕРІР°СЂР°',
+	file_name VARCHAR(255) NOT NULL COMMENT 'РРјСЏ С„Р°Р№Р»Р° РєР°СЂС‚РёРЅРєРё',
 	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) COMMENT 'Таблица картинок товаров';
+) COMMENT 'РўР°Р±Р»РёС†Р° РєР°СЂС‚РёРЅРѕРє С‚РѕРІР°СЂРѕРІ';
 
 DROP TABLE IF EXISTS discounts;
 CREATE TABLE discounts (
-	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор скидки на товар',
-	product_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на товар',
-	discount DECIMAL(11,1) UNSIGNED COMMENT 'Величина скидки от 0.0 до 1.0',
-	start_at DATETIME COMMENT 'Дата начала действия скидки',
-	stop_at DATETIME COMMENT 'Дата окончания действия скидки',
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЃРєРёРґРєРё РЅР° С‚РѕРІР°СЂ',
+	product_id INT UNSIGNED NOT NULL COMMENT 'РЎСЃС‹Р»РєР° РЅР° С‚РѕРІР°СЂ',
+	discount DECIMAL(11,1) UNSIGNED COMMENT 'Р’РµР»РёС‡РёРЅР° СЃРєРёРґРєРё РѕС‚ 0.0 РґРѕ 1.0',
+	start_at DATETIME COMMENT 'Р”Р°С‚Р° РЅР°С‡Р°Р»Р° РґРµР№СЃС‚РІРёСЏ СЃРєРёРґРєРё',
+	stop_at DATETIME COMMENT 'Р”Р°С‚Р° РѕРєРѕРЅС‡Р°РЅРёСЏ РґРµР№СЃС‚РІРёСЏ СЃРєРёРґРєРё',
 	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) COMMENT 'Таблица скидок';
+) COMMENT 'РўР°Р±Р»РёС†Р° СЃРєРёРґРѕРє';
 
 DROP TABLE IF EXISTS reviews;
 CREATE TABLE reviews(
-	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор отзыва на товар',
-	buyer_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на покупателя',
-	product_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на товар',
-	quality ENUM('1', '2', '3', '4', '5') NOT NULL COMMENT 'Качество товара',
-	description VARCHAR(255) COMMENT 'Отзыв на товар',
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РѕС‚Р·С‹РІР° РЅР° С‚РѕРІР°СЂ',
+	buyer_id INT UNSIGNED NOT NULL COMMENT 'РЎСЃС‹Р»РєР° РЅР° РїРѕРєСѓРїР°С‚РµР»СЏ',
+	product_id INT UNSIGNED NOT NULL COMMENT 'РЎСЃС‹Р»РєР° РЅР° С‚РѕРІР°СЂ',
+	quality ENUM('1', '2', '3', '4', '5') NOT NULL COMMENT 'РљР°С‡РµСЃС‚РІРѕ С‚РѕРІР°СЂР°',
+	description VARCHAR(255) COMMENT 'РћС‚Р·С‹РІ РЅР° С‚РѕРІР°СЂ',
 	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) COMMENT 'Таблица отзывов';
+) COMMENT 'РўР°Р±Р»РёС†Р° РѕС‚Р·С‹РІРѕРІ';
 
 -- ALTER TABLE products DROP CONSTRAINT products_catalog_id;
 ALTER TABLE products ADD CONSTRAINT products_catalog_id FOREIGN KEY (catalog_id) REFERENCES catalogs(id);
@@ -82,22 +82,22 @@ CREATE INDEX products_indx ON products(name);
 
 DROP TABLE IF EXISTS warehouses;
 CREATE TABLE warehouses(
-	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор склада',
-	name VARCHAR(50) NOT NULL COMMENT 'Название склада',
-	address VARCHAR(100) NOT NULL COMMENT 'Адрес склада',
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЃРєР»Р°РґР°',
+	name VARCHAR(50) NOT NULL COMMENT 'РќР°Р·РІР°РЅРёРµ СЃРєР»Р°РґР°',
+	address VARCHAR(100) NOT NULL COMMENT 'РђРґСЂРµСЃ СЃРєР»Р°РґР°',
 	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) COMMENT 'Таблица складов/магазинов';
+) COMMENT 'РўР°Р±Р»РёС†Р° СЃРєР»Р°РґРѕРІ/РјР°РіР°Р·РёРЅРѕРІ';
 
 DROP TABLE IF EXISTS warehouse_products;
 CREATE TABLE warehouse_products(
-	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор картинки товара',
-	warehouse_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на склад',
-	product_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на товар',
- 	quantity INT UNSIGNED COMMENT 'Количество товара на складе',
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РєР°СЂС‚РёРЅРєРё С‚РѕРІР°СЂР°',
+	warehouse_id INT UNSIGNED NOT NULL COMMENT 'РЎСЃС‹Р»РєР° РЅР° СЃРєР»Р°Рґ',
+	product_id INT UNSIGNED NOT NULL COMMENT 'РЎСЃС‹Р»РєР° РЅР° С‚РѕРІР°СЂ',
+ 	quantity INT UNSIGNED COMMENT 'РљРѕР»РёС‡РµСЃС‚РІРѕ С‚РѕРІР°СЂР° РЅР° СЃРєР»Р°РґРµ',
 	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) COMMENT 'Таблица товаров на складе';
+) COMMENT 'РўР°Р±Р»РёС†Р° С‚РѕРІР°СЂРѕРІ РЅР° СЃРєР»Р°РґРµ';
 
 -- ALTER TABLE warehouse_products DROP CONSTRAINT warehouse_products_warehouse_id;
 ALTER TABLE warehouse_products ADD CONSTRAINT warehouse_products_warehouse_id FOREIGN KEY (warehouse_id) REFERENCES warehouses(id);
@@ -107,21 +107,21 @@ CREATE INDEX warehouses_indx ON warehouses(name, address);
 
 DROP TABLE IF EXISTS orders;
 CREATE TABLE orders (
-	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор заказа',
-	buyer_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на покупателя',
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ Р·Р°РєР°Р·Р°',
+	buyer_id INT UNSIGNED NOT NULL COMMENT 'РЎСЃС‹Р»РєР° РЅР° РїРѕРєСѓРїР°С‚РµР»СЏ',
 	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) COMMENT 'Таблица заказов';
+) COMMENT 'РўР°Р±Р»РёС†Р° Р·Р°РєР°Р·РѕРІ';
 
 DROP TABLE IF EXISTS orders_products;
 CREATE TABLE orders_products (
-	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор товаров в заказе',
-	order_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на заказ',
-	product_id INT UNSIGNED NOT NULL COMMENT 'Ссылка на товар',
-	quantity INT UNSIGNED DEFAULT 1 COMMENT 'Количество товара в заказе',
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ С‚РѕРІР°СЂРѕРІ РІ Р·Р°РєР°Р·Рµ',
+	order_id INT UNSIGNED NOT NULL COMMENT 'РЎСЃС‹Р»РєР° РЅР° Р·Р°РєР°Р·',
+	product_id INT UNSIGNED NOT NULL COMMENT 'РЎСЃС‹Р»РєР° РЅР° С‚РѕРІР°СЂ',
+	quantity INT UNSIGNED DEFAULT 1 COMMENT 'РљРѕР»РёС‡РµСЃС‚РІРѕ С‚РѕРІР°СЂР° РІ Р·Р°РєР°Р·Рµ',
 	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) COMMENT 'Таблица наполнения заказа';
+) COMMENT 'РўР°Р±Р»РёС†Р° РЅР°РїРѕР»РЅРµРЅРёСЏ Р·Р°РєР°Р·Р°';
 
 -- ALTER TABLE orders DROP CONSTRAINT orders_buyer_id;
 ALTER TABLE orders ADD CONSTRAINT orders_buyer_id FOREIGN KEY (buyer_id) REFERENCES buyers(id);
@@ -131,45 +131,45 @@ ALTER TABLE orders_products ADD CONSTRAINT orders_products_order_id FOREIGN KEY 
 ALTER TABLE orders_products ADD CONSTRAINT orders_products_product_id FOREIGN KEY (product_id) REFERENCES products(id);
 
 ***********************************************************************************************************************************************************************************************************
--- 2 блок: наполнение таблиц данными
-INSERT INTO buyers (first_name, last_name, birthday, email, phone, created_at, updated_at) VALUES ('Дмитрий', 'Менделеев', '1834-02-08', 'd.mendeleev@mail.ru', '+7(905)123-01-01', NOW(), NOW());
-INSERT INTO buyers (first_name, last_name, birthday, email, phone, created_at, updated_at) VALUES ('Владимир', 'Вернадский', '1863-02-28', 'v.vernadsky@mail.ru', '+7(905)456-21-89', NOW(), NOW());
-INSERT INTO buyers (first_name, last_name, birthday, email, phone, created_at, updated_at) VALUES ('Сергей', 'Королёв', '1906-01-12', 's.korolev@mail.ru', '+7(905)895-23-78', NOW(), NOW());
-INSERT INTO buyers (first_name, last_name, birthday, email, phone, created_at, updated_at) VALUES ('Владимир', 'Высоцкий', '1938-01-25', 'v.visotsky@mail.ru', '+7(905)458-48-12', NOW(), NOW());
-INSERT INTO buyers (first_name, last_name, birthday, email, phone, created_at, updated_at) VALUES ('Юрий', 'Гагарин', '1934-03-09', 'y.gagarin@mail.ru', '+7(905)895-56-89', NOW(), NOW());
-INSERT INTO buyers (first_name, last_name, birthday, email, phone, created_at, updated_at) VALUES ('Георгий', 'Жуков', '1896-11-19', 'g.zhukov@mail.ru', '+7(905)516-42-69', NOW(), NOW());
-INSERT INTO buyers (first_name, last_name, birthday, email, phone, created_at, updated_at) VALUES ('Лев', 'Яшин', '1929-10-22', 'l.yashin@mail.ru', '+7(905)896-45-78', NOW(), NOW());
-INSERT INTO buyers (first_name, last_name, birthday, email, phone, created_at, updated_at) VALUES ('Валерий', 'Чкалов', '1904-02-02', 'v.chkalov@mail.ru', '+7(905)896-74-12', NOW(), NOW());
-INSERT INTO buyers (first_name, last_name, birthday, email, phone, created_at, updated_at) VALUES ('Михаил', 'Калашников', '1919-11-10', 'm.kalashnikov@mail.ru', '+7(905)123-11-99', NOW(), NOW());
-INSERT INTO buyers (first_name, last_name, birthday, email, phone, created_at, updated_at) VALUES ('Иван', 'Поддубный', '1871-09-26', 'i.poddubny@mail.ru', '+7(905)789-94-23', NOW(), NOW());
+-- 2 Р±Р»РѕРє: РЅР°РїРѕР»РЅРµРЅРёРµ С‚Р°Р±Р»РёС† РґР°РЅРЅС‹РјРё
+INSERT INTO buyers (first_name, last_name, birthday, email, phone, created_at, updated_at) VALUES ('Р”РјРёС‚СЂРёР№', 'РњРµРЅРґРµР»РµРµРІ', '1834-02-08', 'd.mendeleev@mail.ru', '+7(905)123-01-01', NOW(), NOW());
+INSERT INTO buyers (first_name, last_name, birthday, email, phone, created_at, updated_at) VALUES ('Р’Р»Р°РґРёРјРёСЂ', 'Р’РµСЂРЅР°РґСЃРєРёР№', '1863-02-28', 'v.vernadsky@mail.ru', '+7(905)456-21-89', NOW(), NOW());
+INSERT INTO buyers (first_name, last_name, birthday, email, phone, created_at, updated_at) VALUES ('РЎРµСЂРіРµР№', 'РљРѕСЂРѕР»С‘РІ', '1906-01-12', 's.korolev@mail.ru', '+7(905)895-23-78', NOW(), NOW());
+INSERT INTO buyers (first_name, last_name, birthday, email, phone, created_at, updated_at) VALUES ('Р’Р»Р°РґРёРјРёСЂ', 'Р’С‹СЃРѕС†РєРёР№', '1938-01-25', 'v.visotsky@mail.ru', '+7(905)458-48-12', NOW(), NOW());
+INSERT INTO buyers (first_name, last_name, birthday, email, phone, created_at, updated_at) VALUES ('Р®СЂРёР№', 'Р“Р°РіР°СЂРёРЅ', '1934-03-09', 'y.gagarin@mail.ru', '+7(905)895-56-89', NOW(), NOW());
+INSERT INTO buyers (first_name, last_name, birthday, email, phone, created_at, updated_at) VALUES ('Р“РµРѕСЂРіРёР№', 'Р–СѓРєРѕРІ', '1896-11-19', 'g.zhukov@mail.ru', '+7(905)516-42-69', NOW(), NOW());
+INSERT INTO buyers (first_name, last_name, birthday, email, phone, created_at, updated_at) VALUES ('Р›РµРІ', 'РЇС€РёРЅ', '1929-10-22', 'l.yashin@mail.ru', '+7(905)896-45-78', NOW(), NOW());
+INSERT INTO buyers (first_name, last_name, birthday, email, phone, created_at, updated_at) VALUES ('Р’Р°Р»РµСЂРёР№', 'Р§РєР°Р»РѕРІ', '1904-02-02', 'v.chkalov@mail.ru', '+7(905)896-74-12', NOW(), NOW());
+INSERT INTO buyers (first_name, last_name, birthday, email, phone, created_at, updated_at) VALUES ('РњРёС…Р°РёР»', 'РљР°Р»Р°С€РЅРёРєРѕРІ', '1919-11-10', 'm.kalashnikov@mail.ru', '+7(905)123-11-99', NOW(), NOW());
+INSERT INTO buyers (first_name, last_name, birthday, email, phone, created_at, updated_at) VALUES ('РРІР°РЅ', 'РџРѕРґРґСѓР±РЅС‹Р№', '1871-09-26', 'i.poddubny@mail.ru', '+7(905)789-94-23', NOW(), NOW());
 
-INSERT INTO pictures (file_name, created_at, updated_at) VALUES ('картинка_01', NOW(), NOW());
-INSERT INTO pictures (file_name, created_at, updated_at) VALUES ('картинка_02', NOW(), NOW());
-INSERT INTO pictures (file_name, created_at, updated_at) VALUES ('картинка_03', NOW(), NOW());
-INSERT INTO pictures (file_name, created_at, updated_at) VALUES ('картинка_04', NOW(), NOW());
-INSERT INTO pictures (file_name, created_at, updated_at) VALUES ('картинка_05', NOW(), NOW());
-INSERT INTO pictures (file_name, created_at, updated_at) VALUES ('картинка_06', NOW(), NOW());
-INSERT INTO pictures (file_name, created_at, updated_at) VALUES ('картинка_07', NOW(), NOW());
-INSERT INTO pictures (file_name, created_at, updated_at) VALUES ('картинка_08', NOW(), NOW());
-INSERT INTO pictures (file_name, created_at, updated_at) VALUES ('картинка_09', NOW(), NOW());
-INSERT INTO pictures (file_name, created_at, updated_at) VALUES ('картинка_10', NOW(), NOW());
+INSERT INTO pictures (file_name, created_at, updated_at) VALUES ('РєР°СЂС‚РёРЅРєР°_01', NOW(), NOW());
+INSERT INTO pictures (file_name, created_at, updated_at) VALUES ('РєР°СЂС‚РёРЅРєР°_02', NOW(), NOW());
+INSERT INTO pictures (file_name, created_at, updated_at) VALUES ('РєР°СЂС‚РёРЅРєР°_03', NOW(), NOW());
+INSERT INTO pictures (file_name, created_at, updated_at) VALUES ('РєР°СЂС‚РёРЅРєР°_04', NOW(), NOW());
+INSERT INTO pictures (file_name, created_at, updated_at) VALUES ('РєР°СЂС‚РёРЅРєР°_05', NOW(), NOW());
+INSERT INTO pictures (file_name, created_at, updated_at) VALUES ('РєР°СЂС‚РёРЅРєР°_06', NOW(), NOW());
+INSERT INTO pictures (file_name, created_at, updated_at) VALUES ('РєР°СЂС‚РёРЅРєР°_07', NOW(), NOW());
+INSERT INTO pictures (file_name, created_at, updated_at) VALUES ('РєР°СЂС‚РёРЅРєР°_08', NOW(), NOW());
+INSERT INTO pictures (file_name, created_at, updated_at) VALUES ('РєР°СЂС‚РёРЅРєР°_09', NOW(), NOW());
+INSERT INTO pictures (file_name, created_at, updated_at) VALUES ('РєР°СЂС‚РёРЅРєР°_10', NOW(), NOW());
 
-INSERT INTO catalogs (name) VALUES ('категория_1');
-INSERT INTO catalogs (name) VALUES ('категория_2');
-INSERT INTO catalogs (name) VALUES ('категория_3');
-INSERT INTO catalogs (name) VALUES ('категория_4');
-INSERT INTO catalogs (name) VALUES ('категория_5');
+INSERT INTO catalogs (name) VALUES ('РєР°С‚РµРіРѕСЂРёСЏ_1');
+INSERT INTO catalogs (name) VALUES ('РєР°С‚РµРіРѕСЂРёСЏ_2');
+INSERT INTO catalogs (name) VALUES ('РєР°С‚РµРіРѕСЂРёСЏ_3');
+INSERT INTO catalogs (name) VALUES ('РєР°С‚РµРіРѕСЂРёСЏ_4');
+INSERT INTO catalogs (name) VALUES ('РєР°С‚РµРіРѕСЂРёСЏ_5');
 
-INSERT INTO products (catalog_id, picture_id, name, description, price, created_at, updated_at) VALUES (1, 1, 'макет "Таблица Менделеева"', 'Периодическая система химических элементов', '20733', NOW(), NOW());
-INSERT INTO products (catalog_id, picture_id, name, description, price, created_at, updated_at) VALUES (2, 2, 'памятная монета им.Вернадского', 'Памятная серебряная монету номиналом в 2 рубля, посвящённую 150-летию со дня рождения естествоиспытателя В. И. Вернадского', '17510', NOW(), NOW());
-INSERT INTO products (catalog_id, picture_id, name, description, price, created_at, updated_at) VALUES (3, 3, 'космический корабль «Восток-1»', 'Первый космический аппарат, поднявший человека на околоземную орбиту', '99200', NOW(), NOW());
-INSERT INTO products (catalog_id, picture_id, name, description, price, created_at, updated_at) VALUES (4, 4, 'гитара Высоцкого', 'Музыкальный интсрумент', '68235', NOW(), NOW());
-INSERT INTO products (catalog_id, picture_id, name, description, price, created_at, updated_at) VALUES (5, 5, 'модель  МиГ-15', 'Советский реактивный истребитель, разработанный ОКБ Микояна и Гуревича в конце 1947 года', '15681', NOW(), NOW());
-INSERT INTO products (catalog_id, picture_id, name, description, price, created_at, updated_at) VALUES (1, 6, 'будёновка Жукова', 'Головной убор Г.Жукова', '56987', NOW(), NOW());
-INSERT INTO products (catalog_id, picture_id, name, description, price, created_at, updated_at) VALUES (2, 7, 'кубок "Золотой мяч"', 'Футбольная награда, присуждаемая лучшему футболисту', '74604', NOW(), NOW());
-INSERT INTO products (catalog_id, picture_id, name, description, price, created_at, updated_at) VALUES (3, 8, 'почтовая марка В.Чкалов', 'Марка из серии почтовых марок (СССР, 1938)', '36653', NOW(), NOW());
-INSERT INTO products (catalog_id, picture_id, name, description, price, created_at, updated_at) VALUES (4, 9, 'автомат «АК-47»', 'Самое распространённое стрелковое оружие в мире', '17870', NOW(), NOW());
-INSERT INTO products (catalog_id, picture_id, name, description, price, created_at, updated_at) VALUES (5, 10, 'пудовая гиря', 'Спортивный снаряд, обладающий специальной формой в виде металлического ядра с рукоятью', '44764', NOW(), NOW());
+INSERT INTO products (catalog_id, picture_id, name, description, price, created_at, updated_at) VALUES (1, 1, 'РјР°РєРµС‚ "РўР°Р±Р»РёС†Р° РњРµРЅРґРµР»РµРµРІР°"', 'РџРµСЂРёРѕРґРёС‡РµСЃРєР°СЏ СЃРёСЃС‚РµРјР° С…РёРјРёС‡РµСЃРєРёС… СЌР»РµРјРµРЅС‚РѕРІ', '20733', NOW(), NOW());
+INSERT INTO products (catalog_id, picture_id, name, description, price, created_at, updated_at) VALUES (2, 2, 'РїР°РјСЏС‚РЅР°СЏ РјРѕРЅРµС‚Р° РёРј.Р’РµСЂРЅР°РґСЃРєРѕРіРѕ', 'РџР°РјСЏС‚РЅР°СЏ СЃРµСЂРµР±СЂСЏРЅР°СЏ РјРѕРЅРµС‚Сѓ РЅРѕРјРёРЅР°Р»РѕРј РІ 2 СЂСѓР±Р»СЏ, РїРѕСЃРІСЏС‰С‘РЅРЅСѓСЋ 150-Р»РµС‚РёСЋ СЃРѕ РґРЅСЏ СЂРѕР¶РґРµРЅРёСЏ РµСЃС‚РµСЃС‚РІРѕРёСЃРїС‹С‚Р°С‚РµР»СЏ Р’. Р. Р’РµСЂРЅР°РґСЃРєРѕРіРѕ', '17510', NOW(), NOW());
+INSERT INTO products (catalog_id, picture_id, name, description, price, created_at, updated_at) VALUES (3, 3, 'РєРѕСЃРјРёС‡РµСЃРєРёР№ РєРѕСЂР°Р±Р»СЊ В«Р’РѕСЃС‚РѕРє-1В»', 'РџРµСЂРІС‹Р№ РєРѕСЃРјРёС‡РµСЃРєРёР№ Р°РїРїР°СЂР°С‚, РїРѕРґРЅСЏРІС€РёР№ С‡РµР»РѕРІРµРєР° РЅР° РѕРєРѕР»РѕР·РµРјРЅСѓСЋ РѕСЂР±РёС‚Сѓ', '99200', NOW(), NOW());
+INSERT INTO products (catalog_id, picture_id, name, description, price, created_at, updated_at) VALUES (4, 4, 'РіРёС‚Р°СЂР° Р’С‹СЃРѕС†РєРѕРіРѕ', 'РњСѓР·С‹РєР°Р»СЊРЅС‹Р№ РёРЅС‚СЃСЂСѓРјРµРЅС‚', '68235', NOW(), NOW());
+INSERT INTO products (catalog_id, picture_id, name, description, price, created_at, updated_at) VALUES (5, 5, 'РјРѕРґРµР»СЊ  РњРёР“-15', 'РЎРѕРІРµС‚СЃРєРёР№ СЂРµР°РєС‚РёРІРЅС‹Р№ РёСЃС‚СЂРµР±РёС‚РµР»СЊ, СЂР°Р·СЂР°Р±РѕС‚Р°РЅРЅС‹Р№ РћРљР‘ РњРёРєРѕСЏРЅР° Рё Р“СѓСЂРµРІРёС‡Р° РІ РєРѕРЅС†Рµ 1947 РіРѕРґР°', '15681', NOW(), NOW());
+INSERT INTO products (catalog_id, picture_id, name, description, price, created_at, updated_at) VALUES (1, 6, 'Р±СѓРґС‘РЅРѕРІРєР° Р–СѓРєРѕРІР°', 'Р“РѕР»РѕРІРЅРѕР№ СѓР±РѕСЂ Р“.Р–СѓРєРѕРІР°', '56987', NOW(), NOW());
+INSERT INTO products (catalog_id, picture_id, name, description, price, created_at, updated_at) VALUES (2, 7, 'РєСѓР±РѕРє "Р—РѕР»РѕС‚РѕР№ РјСЏС‡"', 'Р¤СѓС‚Р±РѕР»СЊРЅР°СЏ РЅР°РіСЂР°РґР°, РїСЂРёСЃСѓР¶РґР°РµРјР°СЏ Р»СѓС‡С€РµРјСѓ С„СѓС‚Р±РѕР»РёСЃС‚Сѓ', '74604', NOW(), NOW());
+INSERT INTO products (catalog_id, picture_id, name, description, price, created_at, updated_at) VALUES (3, 8, 'РїРѕС‡С‚РѕРІР°СЏ РјР°СЂРєР° Р’.Р§РєР°Р»РѕРІ', 'РњР°СЂРєР° РёР· СЃРµСЂРёРё РїРѕС‡С‚РѕРІС‹С… РјР°СЂРѕРє (РЎРЎРЎР , 1938)', '36653', NOW(), NOW());
+INSERT INTO products (catalog_id, picture_id, name, description, price, created_at, updated_at) VALUES (4, 9, 'Р°РІС‚РѕРјР°С‚ В«РђРљ-47В»', 'РЎР°РјРѕРµ СЂР°СЃРїСЂРѕСЃС‚СЂР°РЅС‘РЅРЅРѕРµ СЃС‚СЂРµР»РєРѕРІРѕРµ РѕСЂСѓР¶РёРµ РІ РјРёСЂРµ', '17870', NOW(), NOW());
+INSERT INTO products (catalog_id, picture_id, name, description, price, created_at, updated_at) VALUES (5, 10, 'РїСѓРґРѕРІР°СЏ РіРёСЂСЏ', 'РЎРїРѕСЂС‚РёРІРЅС‹Р№ СЃРЅР°СЂСЏРґ, РѕР±Р»Р°РґР°СЋС‰РёР№ СЃРїРµС†РёР°Р»СЊРЅРѕР№ С„РѕСЂРјРѕР№ РІ РІРёРґРµ РјРµС‚Р°Р»Р»РёС‡РµСЃРєРѕРіРѕ СЏРґСЂР° СЃ СЂСѓРєРѕСЏС‚СЊСЋ', '44764', NOW(), NOW());
 
 INSERT INTO orders (buyer_id, created_at, updated_at) VALUES (1, NOW(), NOW());
 INSERT INTO orders (buyer_id, created_at, updated_at) VALUES (2, NOW(), NOW());
@@ -182,10 +182,10 @@ INSERT INTO orders (buyer_id, created_at, updated_at) VALUES (8, NOW(), NOW());
 INSERT INTO orders (buyer_id, created_at, updated_at) VALUES (9, NOW(), NOW());
 INSERT INTO orders (buyer_id, created_at, updated_at) VALUES (10, NOW(), NOW());
 
-INSERT INTO warehouses (name, address, created_at, updated_at) VALUES ('Склад_1', 'г.Актобе', NOW(), NOW());
-INSERT INTO warehouses (name, address, created_at, updated_at) VALUES ('Склад_2', 'г.Уральск', NOW(), NOW());
-INSERT INTO warehouses (name, address, created_at, updated_at) VALUES ('Склад_3', 'г.Актау', NOW(), NOW());
-INSERT INTO warehouses (name, address, created_at, updated_at) VALUES ('Склад_4', 'г.Атырау', NOW(), NOW());
+INSERT INTO warehouses (name, address, created_at, updated_at) VALUES ('РЎРєР»Р°Рґ_1', 'Рі.РђРєС‚РѕР±Рµ', NOW(), NOW());
+INSERT INTO warehouses (name, address, created_at, updated_at) VALUES ('РЎРєР»Р°Рґ_2', 'Рі.РЈСЂР°Р»СЊСЃРє', NOW(), NOW());
+INSERT INTO warehouses (name, address, created_at, updated_at) VALUES ('РЎРєР»Р°Рґ_3', 'Рі.РђРєС‚Р°Сѓ', NOW(), NOW());
+INSERT INTO warehouses (name, address, created_at, updated_at) VALUES ('РЎРєР»Р°Рґ_4', 'Рі.РђС‚С‹СЂР°Сѓ', NOW(), NOW());
 
 INSERT INTO warehouse_products (warehouse_id, product_id, quantity, created_at, updated_at) VALUES (1, 1, 1500, NOW(), NOW());
 INSERT INTO warehouse_products (warehouse_id, product_id, quantity, created_at, updated_at) VALUES (1, 2, 1200, NOW(), NOW());
@@ -243,6 +243,36 @@ SELECT * FROM orders_products op ;
 SELECT * FROM discounts d ;
 SELECT count(1) FROM orders;
 SELECT count(1) FROM orders_products op ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
