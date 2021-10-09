@@ -1,0 +1,88 @@
+USE im;
+
+-- 1. ТОП-5 покупателей
+SELECT  
+	CONCAT (b.last_name, ' ',	b.first_name) AS bayer,
+	COUNT(o.id) AS orders_count
+FROM
+	buyers b
+LEFT JOIN orders o ON
+	(b.id = o.buyer_id)
+GROUP BY
+	b.id
+ORDER BY
+	orders_count 
+DESC
+LIMIT 5;
+
+********************************************************************* 
+-- 2. ТОП-5 продаваемых товаров
+WITH top AS(
+SELECT 
+	product_id, 
+	sum(quantity) AS total_quantity
+FROM 
+	orders_products op 
+GROUP BY 
+	product_id)
+SELECT 
+	p.name,
+	p.description,
+	t.total_quantity
+FROM 
+	top t 
+LEFT JOIN products p ON 
+(t.product_id = p.id)
+ORDER BY total_quantity DESC
+LIMIT 5;
+
+*********************************************************************	
+-- 3. Выборка товара с активной скидкой
+SELECT 
+	p.name AS name_product,
+	c.name AS category, 
+	p.price AS price,
+	d.discount AS discount,
+	d.stop_at AS discount_ends
+  FROM products p
+  LEFT JOIN catalogs c ON 
+  (p.catalog_id = c.id)
+  INNER JOIN discounts d ON
+  (d.product_id = p.id AND d.discount <= 1.0 AND d.stop_at > NOW()) 
+ ORDER BY discount DESC;
+
+*********************************************************************
+-- 4. Выборка товара с ценой меньше 30,000 и оценкой 4 или 5
+SELECT 
+	c.name AS category,	
+	p.name,
+	p.description AS description_products,
+	p.price,
+	r.quality,
+	r.description AS reviews 
+FROM 
+	products p 
+INNER JOIN catalogs c ON
+	(p.catalog_id = c.id AND p.price < 30000)
+INNER JOIN reviews r ON 
+	(r.product_id = p.id)
+WHERE r.quality = 4 OR r.quality = 5;
+
+*********************************************************************
+-- 5. Выборка остатков по складам
+SELECT 
+	c.name AS category,
+	p.name AS name_products,
+	w.name AS name_warehouse,
+	w.address AS warehouse_address,
+	p.price AS price_per_unit,
+	wp.quantity AS total_number
+FROM 
+	warehouse_products wp 
+LEFT JOIN products p ON
+	(wp.product_id = p.id)
+LEFT JOIN warehouses w ON
+	(wp.warehouse_id = w.id)
+LEFT JOIN catalogs c ON
+	(p.catalog_id = c.id)
+ORDER BY price_per_unit DESC;
